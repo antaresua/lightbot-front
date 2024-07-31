@@ -16,6 +16,10 @@ export default {
 </script>
 
 <style>
+body {
+  font-family: 'Roboto', sans-serif; /* Додає шрифт Roboto до всього документа */
+}
+
 nav {
   padding: 1rem;
   background-color: #f8f9fa;
