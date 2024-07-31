@@ -8,4 +8,4 @@ RUN npm run build
 # Stage 2: Serve the application with nginx
 FROM nginx:alpine
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
