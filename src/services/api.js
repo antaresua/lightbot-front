@@ -42,4 +42,7 @@ export default {
   deleteTimeSlot(id) {
     return apiClient.delete(`/timeslots/${id}`);
   },
+  getTimeSlotsByDayOfWeek(dayOfWeek) {
+    return apiClient.get(`/timeslots/day/${dayOfWeek}`);
+  },
 };

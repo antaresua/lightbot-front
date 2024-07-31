@@ -5,6 +5,7 @@ import DayEdit from '../components/DayEdit.vue';
 import TimeSlotList from '../components/TimeSlotList.vue';
 import TimeSlotForm from '../components/TimeSlotForm.vue';
 import TimeSlotEdit from '../components/TimeSlotEdit.vue';
+import TimeSlotsForDay from '../components/TimeSlotsForDay.vue';
 // Імпортуйте інші компоненти
 
 const routes = [
@@ -39,6 +40,12 @@ const routes = [
     name: 'TimeSlotEdit',
     component: TimeSlotEdit,
     props: true
+  },
+  {
+    path: '/timeslots/by-day/:dayOfWeek',
+    name: 'TimeSlotsForDay',
+    component: TimeSlotsForDay,
+    props: route => ({ dayOfWeek: parseInt(route.params.dayOfWeek, 10) })
   }
 ];
 

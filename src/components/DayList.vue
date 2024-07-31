@@ -18,6 +18,7 @@
           <td>
             <button @click="editDay(day.id)" class="btn btn-primary">Редагувати</button>
             <button @click="deleteDay(day.id)" class="btn btn-danger">Видалити</button>
+            <button @click="showTimeSlots(day.dayOfWeek)" class="btn btn-black">Показати таймслоти</button>
           </td>
         </tr>
       </tbody>
@@ -29,7 +30,7 @@
 </template>
 
 <script>
-import apiService from '../services/api'; // Імпортуйте ваш API сервіс
+import apiService from '../services/api';
 
 export default {
   data() {
@@ -42,7 +43,6 @@ export default {
   created() {
     apiService.getDays()
       .then(response => {
-        // Дістати дані з response.data
         this.days = response.data;
       })
       .catch(error => {
@@ -76,9 +76,12 @@ export default {
             this.days = this.days.filter(day => day.id !== id);
           })
           .catch(error => {
-            console.error('There was an error deleting the day!', error);
+            console.error('Error deleting day:', error);
           });
       }
+    },
+    showTimeSlots(dayOfWeek) {
+      this.$router.push(`/timeslots/by-day/${dayOfWeek}`);
     },
     sortTable(key) {
       this.sortOrder = this.sortKey === key && this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -123,10 +126,6 @@ export default {
   background-color: #e2e2e2;
 }
 
-.narrow-col {
-  width: 120px; /* Встановіть ширину відповідно до вашого дизайну */
-}
-
 .btn {
   padding: 10px 20px;
   border: none;
@@ -162,13 +161,21 @@ export default {
   background-color: #c82333;
 }
 
-.add-button-container {
-  margin-top: 20px;
-  padding-left: 0; /* Вирівнювання по лівому краю таблиці */
+.btn-black {
+  background-color: #000;
+  color: white;
 }
 
-.add-button-container button {
-  display: block;
-  margin: 0;
+.btn-black:hover {
+  background-color: #333;
+}
+
+.add-button-container {
+  margin-top: 20px;
+  padding: 0; /* Видалення відступів */
+}
+
+.add-button-container .btn {
+  margin-left: 0; /* Щоб кнопка не мала відступів зліва */
 }
 </style>
