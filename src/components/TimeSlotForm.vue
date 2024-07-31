@@ -30,15 +30,15 @@
         <div class="form-group">
           <label for="type">Тип:</label>
           <select v-model="slot.type" required>
-            <option value="on">Увімкнення</option>
+            <option value="on">Ввімкнення</option>
             <option value="off">Вимкнення</option>
-            <option value="possible_on">Можливе увімкнення</option>
+            <option value="possible_on">Можливе ввімкнення</option>
           </select>
         </div>
         <button type="button" @click="removeTimeSlot(index)" class="btn btn-danger">Видалити цей таймслот</button>
       </div>
       <div class="form-buttons">
-        <button type="button" @click="addTimeSlot" class="btn btn-primary add-button">Додати ще один таймслот</button>
+        <button type="button" @click="addTimeSlot" class="btn btn-primary btn-left">Додати ще один таймслот</button>
         <div class="button-group">
           <button @click="cancel" type="button" class="btn btn-secondary">Скасувати</button>
           <button type="submit" class="btn btn-success">Зберегти</button>
@@ -99,32 +99,26 @@ export default {
 
 <style scoped>
 .form-container {
-  max-width: 600px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+.time-slot-form,
+.day-form {
   margin-bottom: 20px;
-  font-size: 24px;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  font-weight: bold;
 }
 
 .form-group input,
@@ -133,24 +127,25 @@ h2 {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  box-sizing: border-box; /* Додано для того, щоб паддінги і бордери враховувалися у загальному розмірі */
+  box-sizing: border-box;
 }
 
 .fixed-time {
-  width: 100%; /* Змінено з 50px на 100% для полів часу */
+  width: 100%;
 }
 
 .form-buttons {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
-.add-button {
-  align-self: flex-start; /* Вирівнює кнопку по лівому краю */
+.btn-left {
+  margin-right: auto;
 }
 
-.button-group {
+.button-group,
+.btn-group-right {
   display: flex;
   gap: 10px;
 }
@@ -160,7 +155,6 @@ h2 {
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin: 5px;
 }
 
 .btn-primary {

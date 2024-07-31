@@ -5,7 +5,7 @@
       <thead>
         <tr>
           <th @click="sortTable('id')">ID</th>
-          <th @click="sortTable('dayOfWeek')">Номер дня тижня</th>
+          <th @click="sortTable('dayOfWeek')" class="narrow-col">№ дня тижня (ISO)</th>
           <th @click="sortTable('name')">Назва</th>
           <th>Дії</th>
         </tr>
@@ -13,7 +13,7 @@
       <tbody>
         <tr v-for="day in sortedDays" :key="day.id">
           <td>{{ day.id }}</td>
-          <td>{{ day.dayOfWeek }}</td>
+          <td class="narrow-col">{{ day.dayOfWeek }}</td>
           <td>{{ day.name }}</td>
           <td>
             <button @click="editDay(day.id)" class="btn btn-primary">Редагувати</button>
@@ -22,7 +22,9 @@
         </tr>
       </tbody>
     </table>
-    <button @click="goToAddPage" class="btn btn-success">Додати новий день</button>
+    <div class="add-button-container">
+      <button @click="goToAddPage" class="btn btn-success">Додати новий день</button>
+    </div>
   </div>
 </template>
 
@@ -101,7 +103,7 @@ export default {
 .days-table th, .days-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
+  text-align: center; /* Центрування тексту у ячейках */
 }
 
 .days-table th {
@@ -119,6 +121,10 @@ export default {
 
 .days-table tr:hover {
   background-color: #e2e2e2;
+}
+
+.narrow-col {
+  width: 120px; /* Встановіть ширину відповідно до вашого дизайну */
 }
 
 .btn {
@@ -154,5 +160,15 @@ export default {
 
 .btn-danger:hover {
   background-color: #c82333;
+}
+
+.add-button-container {
+  margin-top: 20px;
+  padding-left: 0; /* Вирівнювання по лівому краю таблиці */
+}
+
+.add-button-container button {
+  display: block;
+  margin: 0;
 }
 </style>

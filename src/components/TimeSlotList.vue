@@ -26,11 +26,15 @@
         </tr>
       </tbody>
     </table>
-    <router-link to="/timeslots/add">
-      <button class="btn btn-success">Додати новий таймслот</button>
-    </router-link>
+    <div class="add-button-container">
+      <router-link to="/timeslots/add">
+        <button class="btn btn-success">Додати новий таймслот</button>
+      </router-link>
+    </div>
   </div>
 </template>
+
+
 
 <script>
 import apiService from '../services/api'; // імпортуйте ваш API сервіс
@@ -100,11 +104,11 @@ export default {
     getTypeName(type) {
       switch (type) {
         case 'on':
-          return 'Увімкнення';
+          return 'Ввімкнення';
         case 'off':
           return 'Вимкнення';
         case 'possible_on':
-          return 'Можливе увімкнення';
+          return 'Можливе ввімкнення';
         default:
           return '';
       }
@@ -128,7 +132,7 @@ export default {
 .time-slots-table th, .time-slots-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
+  text-align: center; /* Центрування тексту у ячейках */
 }
 
 .time-slots-table th {
@@ -181,5 +185,14 @@ export default {
 
 .btn-success:hover {
   background-color: #218838;
+}
+
+.add-button-container {
+  margin-top: 20px;
+  padding: 0; /* Видалення відступів */
+}
+
+.add-button-container .btn {
+  margin-left: 0; /* Щоб кнопка не мала відступів зліва */
 }
 </style>

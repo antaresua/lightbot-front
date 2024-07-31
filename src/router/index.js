@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import DayList from '../components/DayList.vue';
 import DayForm from '../components/DayForm.vue';
+import DayEdit from '../components/DayEdit.vue';
 import TimeSlotList from '../components/TimeSlotList.vue';
 import TimeSlotForm from '../components/TimeSlotForm.vue';
 // Імпортуйте інші компоненти
@@ -19,7 +20,7 @@ const routes = [
   {
     path: '/days/:id/edit',
     name: 'DayEdit',
-    component: DayForm,
+    component: DayEdit,
     props: true
   },
   {

@@ -5,17 +5,20 @@
       <div v-for="(day, index) in days" :key="index" class="day-form">
         <div class="form-group">
           <label for="dayOfWeek">Номер дня тижня:</label>
-          <input type="number" v-model="day.dayOfWeek" required>
+          <input type="number" id="dayOfWeek-{{ index }}" v-model="day.dayOfWeek" required autocomplete="off">
         </div>
         <div class="form-group">
           <label for="name">Ім'я дня тижня:</label>
-          <input type="text" v-model="day.name" required>
+          <input type="text" id="name-{{ index }}" v-model="day.name" required autocomplete="off">
         </div>
         <button type="button" @click="removeDay(index)" class="btn btn-danger">Видалити цей день</button>
       </div>
       <div class="form-buttons">
-        <button type="button" @click="addDay" class="btn btn-primary">Додати ще один день</button>
-        <button type="submit" class="btn btn-success">Зберегти</button>
+        <button type="button" @click="addDay" class="btn btn-primary btn-left">Додати ще один день</button>
+        <div class="btn-group-right">
+          <button type="button" @click="cancel" class="btn btn-secondary">Скасувати</button>
+          <button type="submit" class="btn btn-success">Зберегти</button>
+        </div>
       </div>
     </form>
   </div>
@@ -34,12 +37,12 @@ export default {
   data() {
     return {
       days: [{ name: '', dayOfWeek: '' }], // Початкове поле для одного дня
-      formTitle: 'Add New Days'
+      formTitle: 'Додати дні тижня'
     };
   },
   created() {
     if (this.id) {
-      this.formTitle = 'Edit Days';
+      this.formTitle = 'Редагувати дні тижня';
       apiService.getDay(this.id)
         .then(response => {
           this.days = [response.data]; // Якщо редагуємо один день, створюємо масив з одного елемента
@@ -123,12 +126,20 @@ export default {
   margin-top: 20px; /* Додає відступ зверху */
 }
 
+.btn-left {
+  margin-right: auto; /* Виштовхує кнопку "Додати ще один день" на ліву сторону */
+}
+
+.btn-group-right {
+  display: flex;
+  gap: 10px; /* Відстань між кнопками */
+}
+
 .btn {
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin: 5px;
 }
 
 .btn-primary {
@@ -156,5 +167,14 @@ export default {
 
 .btn-success:hover {
   background-color: #218838;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
 }
 </style>
