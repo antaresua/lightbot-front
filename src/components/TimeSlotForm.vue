@@ -14,7 +14,7 @@
         <div class="form-group">
           <label for="startDay">Початковий день:</label>
           <select v-model="slot.startDay" required>
-            <option v-for="day in days" :key="day.id" :value="day.id">
+            <option v-for="day in days" :key="day.dayOfWeek" :value="day.dayOfWeek">
               {{ day.name }}
             </option>
           </select>
@@ -22,7 +22,7 @@
         <div class="form-group">
           <label for="endDay">Кінцевий день:</label>
           <select v-model="slot.endDay" required>
-            <option v-for="day in days" :key="day.id" :value="day.id">
+            <option v-for="day in days" :key="day.dayOfWeek" :value="day.dayOfWeek">
               {{ day.name }}
             </option>
           </select>
