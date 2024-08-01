@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="timeSlot in sortedTimeSlots" :key="timeSlot.id">
+        <tr v-for="timeSlot in paginatedTimeSlots" :key="timeSlot.id">
           <td>{{ timeSlot.startTime }}</td>
           <td>{{ timeSlot.endTime }}</td>
           <td>{{ timeSlot.startDay.name }}</td>
@@ -26,6 +26,11 @@
         </tr>
       </tbody>
     </table>
+    <div class="pagination">
+      <button @click="prevPage" :disabled="currentPage === 1" class="btn pagination-btn">❮</button>
+      <span>Сторінка {{ currentPage }} з {{ totalPages }}</span>
+      <button @click="nextPage" :disabled="currentPage === totalPages" class="btn pagination-btn">❯</button>
+    </div>
     <div class="add-button-container">
       <router-link to="/timeslots/add">
         <button class="btn btn-success">Додати новий таймслот</button>
@@ -33,8 +38,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script>
 import apiService from '../services/api'; // імпортуйте ваш API сервіс
@@ -44,7 +47,9 @@ export default {
     return {
       timeSlots: [],
       sortKey: '',
-      sortOrder: 'asc'
+      sortOrder: 'asc',
+      currentPage: 1,
+      pageSize: 10,
     };
   },
   created() {
@@ -52,7 +57,6 @@ export default {
   },
   computed: {
     sortedTimeSlots() {
-      // Перевірте, що timeSlots є масивом
       if (!Array.isArray(this.timeSlots)) {
         console.error('Expected timeSlots to be an array.');
         return [];
@@ -66,13 +70,20 @@ export default {
         }
         return this.sortOrder === 'asc' ? result : -result;
       });
+    },
+    paginatedTimeSlots() {
+      const start = (this.currentPage - 1) * this.pageSize;
+      const end = start + this.pageSize;
+      return this.sortedTimeSlots.slice(start, end);
+    },
+    totalPages() {
+      return Math.ceil(this.timeSlots.length / this.pageSize);
     }
   },
   methods: {
     fetchTimeSlots() {
       apiService.getTimeSlots()
         .then(response => {
-          // Переконайтесь, що response.data є масивом
           if (Array.isArray(response.data)) {
             this.timeSlots = response.data;
           } else {
@@ -87,7 +98,7 @@ export default {
       if (confirm('Ви впевнені, що хочете видалити цей таймслот?')) {
         apiService.deleteTimeSlot(id)
           .then(() => {
-            this.fetchTimeSlots(); // Оновити список таймслотів після видалення
+            this.fetchTimeSlots();
           })
           .catch(error => {
             console.error('Error deleting time slot:', error);
@@ -111,6 +122,16 @@ export default {
           return 'Можливе ввімкнення';
         default:
           return '';
+      }
+    },
+    prevPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
+        this.currentPage++;
       }
     }
   }
@@ -194,5 +215,34 @@ export default {
 
 .add-button-container .btn {
   margin-left: 0; /* Щоб кнопка не мала відступів зліва */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+  background-color: white;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.pagination button:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.pagination button:disabled {
+  background-color: #eee;
+  color: #aaa;
+  cursor: not-allowed;
 }
 </style>
