@@ -144,13 +144,17 @@ export default {
     border: 2px solid yellow;
 }
 
+.time-slots-table td:hover {
+    background-color: #a9a9a9; /* Темносірий колір при наведенні */
+}
+
 .cell-on {
     background-color: white;
     color: black;
 }
 
 .cell-off {
-    background-color: rgba(204, 206, 207, .87);
+    background-color: rgba(204, 206, 207, .67); /* Світліший сірий колір */
     color: black;
     background-image: url('../assets/no-electricity.png');
     background-size: 15.75px 15.75px;
