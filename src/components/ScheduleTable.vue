@@ -1,20 +1,22 @@
 <template>
     <div class="table-container">
         <h2 class="table-title">Графік відключень</h2>
-        <table class="time-slots-table">
-            <thead>
-                <tr>
-                    <th colspan="2">Часові<br>проміжки</th>
-                    <th v-for="hour in hours" :key="hour" class="rotate-text" :data-hour="hour"></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="day in sortedDays" :key="day.name">
-                    <td colspan="2" class="day-name">{{ day.name }}</td>
-                    <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.originalDayOfWeek, hour)"></td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="table-wrapper">
+            <table class="time-slots-table">
+                <thead>
+                    <tr>
+                        <th colspan="2">Часові<br>проміжки</th>
+                        <th v-for="hour in hours" :key="hour" class="rotate-text" :data-hour="hour"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="day in sortedDays" :key="day.name">
+                        <td colspan="2" class="day-name">{{ day.name }}</td>
+                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.originalDayOfWeek, hour)"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
 
@@ -44,13 +46,11 @@ export default {
                 originalDayOfWeek: day.dayOfWeek
             })
             ).sort((a, b) => {
-                // Переміщення Неділя в кінець
-                if (a.dayOfWeek === 0) return 1; // Неділя йде в кінець
-                if (b.dayOfWeek === 0) return -1; // Неділя йде в кінець
-                return a.dayOfWeek - b.dayOfWeek; // Інші дні залишаються в порядку
+                if (a.dayOfWeek === 0) return 1;
+                if (b.dayOfWeek === 0) return -1;
+                return a.dayOfWeek - b.dayOfWeek;
             });
         }
-
     },
     methods: {
         async fetchTimeSlots() {
@@ -111,9 +111,14 @@ export default {
     text-align: center;
 }
 
+.table-wrapper {
+    overflow-x: auto; /* Додає горизонтальну прокрутку для таблиці на маленьких екранах */
+}
+
 .time-slots-table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: auto; /* Автоматичне розміщення колонок відповідно до їх вмісту */
 }
 
 .time-slots-table th,
@@ -121,12 +126,13 @@ export default {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
+    word-break: break-word; /* Розбиває довгі слова */
 }
 
 .time-slots-table th {
     background-color: #f2f2f2;
-    font-weight: bold; /* Жирний шрифт для заголовків */
-    font-size: 16px; /* Збільшення розміру шрифту для заголовків */
+    font-weight: bold;
+    font-size: 16px;
 }
 
 .time-slots-table tr:nth-child(even) {
@@ -135,10 +141,9 @@ export default {
 
 .time-slots-table tr:hover {
     background-color: #e2e2e2;
-    border: 2px solid yellow; /* Жовта окантовка при наведенні мишки */
+    border: 2px solid yellow;
 }
 
-/* Додаємо нові стилі для клітинок */
 .cell-on {
     background-color: white;
     color: black;
@@ -166,7 +171,7 @@ export default {
     position: relative;
     text-align: center;
     vertical-align: middle;
-    padding: 15px; /* Додано padding замість фіксованої висоти */
+    padding: 15px;
 }
 
 .time-slots-table th.rotate-text::before {
@@ -182,12 +187,26 @@ export default {
 }
 
 .day-name {
-    font-weight: bold; /* Жирний шрифт для назв днів тижня */
+    font-weight: bold;
     font-size: 14px;
+    white-space: nowrap; /* Переконується, що текст не переноситься на новий рядок */
 }
 
-/* Підсвічування ячейки при наведенні миші */
-.time-slots-table td:hover {
-    background-color: #a9a9a9; /* Темніший відтінок сірого */
+@media (max-width: 768px) {
+    .time-slots-table th,
+    .time-slots-table td {
+        font-size: 12px;
+        padding: 4px;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-slots-table th.rotate-text::before {
+        font-size: 10px;
+    }
+
+    .day-name {
+        font-size: 12px;
+    }
 }
 </style>
