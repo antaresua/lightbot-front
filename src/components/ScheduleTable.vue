@@ -10,9 +10,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="day in sortedDays" :key="day.name">
+                    <tr v-for="day in sortedDays" :key="day.name" @mouseover="highlightRow($event)" @mouseout="removeHighlight($event)">
                         <td colspan="2" class="day-name">{{ day.name }}</td>
-                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.originalDayOfWeek, hour)"></td>
+                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.originalDayOfWeek, hour)" @mouseover="highlightCell($event)" @mouseout="removeCellHighlight($event)"></td>
                     </tr>
                 </tbody>
             </table>
@@ -93,6 +93,22 @@ export default {
                     return '';
             }
         },
+        highlightRow(event) {
+            const row = event.currentTarget;
+            row.classList.add('highlight-row');
+        },
+        removeHighlight(event) {
+            const row = event.currentTarget;
+            row.classList.remove('highlight-row');
+        },
+        highlightCell(event) {
+            const cell = event.currentTarget;
+            cell.classList.add('highlight-cell');
+        },
+        removeCellHighlight(event) {
+            const cell = event.currentTarget;
+            cell.classList.remove('highlight-cell');
+        }
     },
     mounted() {
         this.fetchTimeSlots();
@@ -112,13 +128,13 @@ export default {
 }
 
 .table-wrapper {
-    overflow-x: auto; /* Додає горизонтальну прокрутку для таблиці на маленьких екранах */
+    overflow-x: auto;
 }
 
 .time-slots-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: auto; /* Автоматичне розміщення колонок відповідно до їх вмісту */
+    table-layout: auto;
 }
 
 .time-slots-table th,
@@ -126,7 +142,7 @@ export default {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
-    word-break: break-word; /* Розбиває довгі слова */
+    word-break: break-word;
 }
 
 .time-slots-table th {
@@ -139,13 +155,13 @@ export default {
     background-color: #f9f9f9;
 }
 
-.time-slots-table tr:hover {
+.highlight-row {
     background-color: #e2e2e2;
     border: 2px solid yellow;
 }
 
-.time-slots-table td:hover {
-    background-color: #a9a9a9; /* Темносірий колір при наведенні */
+.highlight-cell {
+    background-color: #696969 !important;
 }
 
 .cell-on {
@@ -154,7 +170,7 @@ export default {
 }
 
 .cell-off {
-    background-color: rgba(204, 206, 207, .67); /* Світліший сірий колір */
+    background-color: rgba(204, 206, 207, .67);
     color: black;
     background-image: url('../assets/no-electricity.png');
     background-size: 15.75px 15.75px;
@@ -193,7 +209,7 @@ export default {
 .day-name {
     font-weight: bold;
     font-size: 14px;
-    white-space: nowrap; /* Переконується, що текст не переноситься на новий рядок */
+    white-space: nowrap;
 }
 
 @media (max-width: 768px) {
