@@ -218,15 +218,47 @@ export default {
         font-size: 12px;
         padding: 4px;
     }
+
+    .time-slots-table th.rotate-text::before {
+        font-size: 12px;
+    }
+
+    .day-name {
+        font-size: 12px;
+        padding: 4px;
+    }
+
+    .cell-off {
+        background-size: 12px 12px;
+    }
+
+    .cell-possible-on {
+        background-size: 12px 12px;
+    }
 }
 
 @media (max-width: 480px) {
+    .time-slots-table th,
+    .time-slots-table td {
+        font-size: 10px;
+        padding: 4px;
+    }
+
     .time-slots-table th.rotate-text::before {
         font-size: 10px;
     }
 
     .day-name {
-        font-size: 12px;
+        font-size: 10px;
+        padding: 4px;
+    }
+
+    .cell-off {
+        background-size: 10px 10px;
+    }
+
+    .cell-possible-on {
+        background-size: 10px 10px;
     }
 }
 </style>
