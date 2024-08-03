@@ -5,17 +5,38 @@
             <table class="time-slots-table">
                 <thead>
                     <tr>
-                        <th colspan="2">Часові<br>проміжки</th>
+                        <th colspan="2" class="time-slots-header">Часові<br>проміжки</th>
                         <th v-for="hour in hours" :key="hour" class="rotate-text" :data-hour="hour"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="day in sortedDays" :key="day.name" @mouseover="highlightRow($event)" @mouseout="removeHighlight($event)">
+                    <tr v-for="day in sortedDays" :key="day.name" @mouseover="highlightRow($event)"
+                        @mouseout="removeHighlight($event)">
                         <td colspan="2" class="day-name">{{ day.name }}</td>
-                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.originalDayOfWeek, hour)" @mouseover="highlightCell($event)" @mouseout="removeCellHighlight($event)"></td>
+                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.originalDayOfWeek, hour)"
+                            @mouseover="highlightCell($event)" @mouseout="removeCellHighlight($event)"></td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <div class="legend">
+            <div class="legend-item">
+                <span class="legend-color cell-off"></span>
+                - Відключення світла
+            </div>
+            <div class="legend-item">
+                <span class="legend-color cell-possible-on"></span>
+                - Можливе включення
+            </div>
+            <div class="legend-item">
+                <span class="legend-color cell-on"></span>
+                - Світло є
+            </div>
+        </div>
+        <div class="subscribe-button-container">
+            <button class="subscribe-button" @click="subscribeToTelegram">Підписатись на Telegram</button>
+            <p class="note">* підписуйтесь, щоб отримувати сповіщення про відключення/включення світла в реальному часі
+            </p>
         </div>
     </div>
 </template>
@@ -108,6 +129,9 @@ export default {
         removeCellHighlight(event) {
             const cell = event.currentTarget;
             cell.classList.remove('highlight-cell');
+        },
+        subscribeToTelegram() {
+            window.location.href = 'https://t.me/svitlobot_em_e2a'; // Додайте посилання на ваш Telegram канал
         }
     },
     mounted() {
@@ -176,6 +200,7 @@ export default {
     background-size: 15.75px 15.75px;
     background-repeat: no-repeat;
     background-position: center;
+    border: 1px solid #ddd;
 }
 
 .cell-possible-on {
@@ -185,6 +210,7 @@ export default {
     background-size: 15.75px 15.75px;
     background-repeat: no-repeat;
     background-position: center;
+    border: 1px solid #ddd;
 }
 
 .time-slots-table th.rotate-text {
@@ -212,53 +238,54 @@ export default {
     white-space: nowrap;
 }
 
-@media (max-width: 768px) {
-    .time-slots-table th,
-    .time-slots-table td {
-        font-size: 12px;
-        padding: 4px;
-    }
-
-    .time-slots-table th.rotate-text::before {
-        font-size: 12px;
-    }
-
-    .day-name {
-        font-size: 12px;
-        padding: 4px;
-    }
-
-    .cell-off {
-        background-size: 12px 12px;
-    }
-
-    .cell-possible-on {
-        background-size: 12px 12px;
-    }
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-@media (max-width: 480px) {
-    .time-slots-table th,
-    .time-slots-table td {
-        font-size: 10px;
-        padding: 4px;
-    }
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    font-size: 14px;
+}
 
-    .time-slots-table th.rotate-text::before {
-        font-size: 10px;
-    }
+.legend-color {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+}
 
-    .day-name {
-        font-size: 10px;
-        padding: 4px;
-    }
+.subscribe-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}
 
-    .cell-off {
-        background-size: 10px 10px;
-    }
+.subscribe-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
 
-    .cell-possible-on {
-        background-size: 10px 10px;
-    }
+.subscribe-button:hover {
+    background-color: #45a049;
+}
+
+.note {
+    color: #888;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+    width: 50%;
 }
 </style>

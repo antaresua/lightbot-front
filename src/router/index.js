@@ -11,6 +11,10 @@ import ScheduleTable from '../components/ScheduleTable.vue';
 
 const routes = [
     {
+        path: '/',
+        redirect: '/schedule' // Редірект з головної сторінки на /schedule
+    },
+    {
         path: '/days',
         name: 'DayList',
         component: DayList
