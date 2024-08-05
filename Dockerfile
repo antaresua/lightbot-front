@@ -19,6 +19,9 @@ COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy certs for https
 COPY docker/nginx/certs /etc/nginx/certs
+RUN chown -R nginx:nginx /etc/nginx/certs
+RUN chmod 644 /path/to/certs/fullchain.pem
+RUN chmod 600 /path/to/certs/privkey.pem
 
 # Expose port 8080
 EXPOSE 8080
