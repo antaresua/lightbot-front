@@ -21,8 +21,8 @@ COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker/nginx/certs/fullchain.pem /etc/nginx/certs/fullchain.pem
 COPY docker/nginx/certs/privkey.pem /etc/nginx/certs/privkey.pem
 RUN chown -R nginx:nginx /etc/nginx/certs
-RUN chmod 644 /etc/nginx/fullchain.pem
-RUN chmod 600 /etc/nginx/privkey.pem
+RUN chmod 644 /etc/nginx/certs/fullchain.pem
+RUN chmod 600 /etc/nginx/certs/privkey.pem
 
 # Expose port 8080
 EXPOSE 8080
