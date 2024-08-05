@@ -18,7 +18,8 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy certs for https
-COPY docker/nginx/certs /etc/nginx/certs
+COPY docker/nginx/certs/fullchain.pem /etc/nginx/certs/fullchain.pem
+COPY docker/nginx/certs/privkey.pem /etc/nginx/certs/privkey.pem
 RUN chown -R nginx:nginx /etc/nginx/certs
 RUN chmod 644 /etc/nginx/fullchain.pem
 RUN chmod 600 /etc/nginx/privkey.pem
