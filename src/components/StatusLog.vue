@@ -7,7 +7,7 @@
                     <th @click="sortTable('id')" class="narrow-col">ID</th>
                     <th @click="sortTable('status')">Статус</th>
                     <th @click="sortTable('createdAt')">Дата</th>
-                    <th class="narrow-col">Дії</th>
+                    <!-- <th class="narrow-col">Дії</th> -->
                 </tr>
             </thead>
             <tbody>
