@@ -149,7 +149,7 @@ export default {
 
 .table-title {
     text-align: center;
-    font-size: 20px; /* Зменште значення до бажаного розміру */
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -215,11 +215,17 @@ export default {
     border: 1px solid #ddd;
 }
 
+.time-slots-header {
+    white-space: nowrap;
+    text-align: center;
+}
+
 .time-slots-table th.rotate-text {
     position: relative;
     text-align: center;
     vertical-align: middle;
     padding: 15px;
+    white-space: nowrap;
 }
 
 .time-slots-table th.rotate-text::before {
@@ -262,32 +268,67 @@ export default {
     border: 1px solid #ddd;
 }
 
+.cell-off {
+    background-color: rgba(204, 206, 207, .67);
+}
+
+.cell-possible-on {
+    background-color: rgba(204, 206, 207, .33);
+}
+
+.cell-on {
+    background-color: white;
+}
+
 .subscribe-button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    text-align: center;
     margin-top: 20px;
 }
 
 .subscribe-button {
     background-color: #4CAF50;
+    /* Змінює фон кнопки на зелений */
     color: white;
+    /* Колір тексту залишається білим */
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
 }
 
 .subscribe-button:hover {
     background-color: #45a049;
+    /* Змінює фон кнопки на темніший зелений при наведенні */
 }
 
 .note {
-    color: #888;
     font-size: 14px;
+    color: #555;
     text-align: center;
-    margin-top: 10px;
-    width: 50%;
+    /* Вирівнювання тексту по центру */
+    margin: 0 auto;
+    /* Автоматичні відступи для центрування */
+    max-width: 50%;
+    /* Максимальна ширина для адаптивності */
+    padding: 0 20px;
+    /* Додаткові відступи з боків, якщо потрібно */
+}
+
+/* Медіа-запити для мобільних пристроїв */
+@media (max-width: 768px) {
+    .time-slots-table th.rotate-text::before {
+        font-size: 12px;
+        /* Зменште розмір шрифту для кращої адаптації */
+    }
+
+    .day-name {
+        font-size: 12px;
+        /* Зменште розмір шрифту для кращої адаптації */
+    }
+
+    .legend-item {
+        font-size: 12px;
+        /* Зменште розмір шрифту для кращої адаптації */
+    }
 }
 </style>
