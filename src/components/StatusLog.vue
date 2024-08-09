@@ -4,7 +4,7 @@
         <table class="status-table">
             <thead>
                 <tr>
-                    <th @click="sortTable('id')" class="narrow-col">ID</th>
+                    <!-- <th @click="sortTable('id')" class="narrow-col">ID</th> -->
                     <th @click="sortTable('status')">Статус</th>
                     <th @click="sortTable('createdAt')">Дата</th>
                     <!-- <th class="narrow-col">Дії</th> -->
@@ -12,7 +12,7 @@
             </thead>
             <tbody>
                 <tr v-for="status in paginatedStatuses" :key="status.id">
-                    <td class="narrow-col">{{ status.id }}</td>
+                    <!-- <td class="narrow-col">{{ status.id }}</td> -->
                     <td>{{ getStatusLabel(status.status) }}</td>
                     <td>{{ status.createdAt }}</td>
                     <!-- <td class="narrow-col">
