@@ -4,7 +4,6 @@
         <table class="days-table">
             <thead>
                 <tr>
-                    <th @click="sortTable('id')">ID</th>
                     <th @click="sortTable('dayOfWeek')" class="narrow-col">№ дня тижня (ISO)</th>
                     <th @click="sortTable('name')">Назва</th>
                     <th>Дії</th>
@@ -12,7 +11,6 @@
             </thead>
             <tbody>
                 <tr v-for="day in sortedDays" :key="day.id">
-                    <td>{{ day.id }}</td>
                     <td class="narrow-col">{{ day.dayOfWeek }}</td>
                     <td>{{ day.name }}</td>
                     <td>
