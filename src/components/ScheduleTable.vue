@@ -149,6 +149,8 @@ export default {
 
 .table-title {
     text-align: center;
+    font-size: 20px; /* Зменште значення до бажаного розміру */
+    font-weight: bold;
 }
 
 .table-wrapper {
