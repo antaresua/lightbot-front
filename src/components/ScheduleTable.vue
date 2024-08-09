@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <h2 class="table-title">Графік відключень</h2>
+        <h2 class="table-title" style="font-weight: bold;">Графік відключень</h2>
         <div class="table-wrapper">
             <table class="time-slots-table">
                 <thead>

@@ -1,6 +1,6 @@
 <template>
     <div class="table-container">
-        <h2 style="text-align: center;">Лог подій</h2>
+        <h2 style="text-align: center; font-weight: bold;">Лог подій</h2>
         <table class="status-table">
             <thead>
                 <tr>
