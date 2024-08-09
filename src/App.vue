@@ -2,6 +2,7 @@
     <div id="app">
         <nav>
             <router-link to="/schedule">Графік</router-link>
+            <router-link to="/statuses">Лог подій</router-link>
             <router-link to="/days">Дні</router-link>
             <router-link to="/timeslots">Години</router-link>
             <!-- Додайте інші посилання на сторінки, якщо потрібно -->

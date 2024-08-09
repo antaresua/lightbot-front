@@ -7,6 +7,7 @@ import TimeSlotForm from '../components/TimeSlotForm.vue';
 import TimeSlotEdit from '../components/TimeSlotEdit.vue';
 import TimeSlotsForDay from '../components/TimeSlotsForDay.vue';
 import ScheduleTable from '../components/ScheduleTable.vue';
+import StatusLog from '../components/StatusLog.vue';
 // Імпортуйте інші компоненти
 
 const routes = [
@@ -56,6 +57,11 @@ const routes = [
         path: '/schedule',
         name: 'Schedule',
         component: ScheduleTable
+    },
+    {
+        path: '/statuses',
+        name: 'StatusLog',
+        component: StatusLog
     }
 ];
 
