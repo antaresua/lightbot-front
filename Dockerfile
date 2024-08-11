@@ -1,21 +1,23 @@
-# Stage 1: Build the Vue.js application
-FROM node:20 as build-stage
+# Use the official Node image as a base
+FROM node:20 as build
+
+# Set working directory
 WORKDIR /app
+
+# Copy application files
 COPY . .
+
+# Install dependencies
 RUN npm install
+
+# Build the application
 RUN npm run build
 
-# Stage 2: Serve the application with nginx
+# Use nginx to serve the static files
 FROM nginx:alpine
 
-# Install openssl package (if needed)
-RUN apk add --no-cache openssl
-
-# Copy built Vue.js static files into Nginx
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+# Copy built files from the previous stage
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80
-EXPOSE 80 443
+EXPOSE 80
