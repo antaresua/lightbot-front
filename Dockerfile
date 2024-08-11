@@ -17,5 +17,5 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 # Copy nginx configuration
 COPY docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 8080
-EXPOSE 8080
+# Expose port 80
+EXPOSE 80
