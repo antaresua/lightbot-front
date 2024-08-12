@@ -1,23 +1,29 @@
-# Use the official Node image as a base
-FROM node:20 as build
+# Вибираємо базовий образ Node.js
+FROM node:16 AS build
 
-# Set working directory
+# Налаштовуємо робочий каталог
 WORKDIR /app
 
-# Copy application files
-COPY . .
+# Копіюємо package.json і package-lock.json
+COPY package*.json ./
 
-# Install dependencies
+# Встановлюємо залежності
 RUN npm install
 
-# Build the application
+# Копіюємо код проєкту
+COPY . .
+
+# Створюємо продакшн-версію
 RUN npm run build
 
-# Use nginx to serve the static files
+# Вибираємо базовий образ для веб-сервера
 FROM nginx:alpine
 
-# Copy built files from the previous stage
+# Копіюємо продакшн-версію з попереднього етапу
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose port 80
+# Виставляємо порт
 EXPOSE 80
+
+# Запускаємо Nginx
+CMD ["nginx", "-g", "daemon off;"]
