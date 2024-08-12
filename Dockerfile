@@ -1,5 +1,5 @@
 # Вибираємо базовий образ Node.js
-FROM node:16 AS build
+FROM node:20 AS build
 
 # Налаштовуємо робочий каталог
 WORKDIR /app
