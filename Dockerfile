@@ -1,28 +1,26 @@
-# Вибираємо базовий образ Node.js
-FROM node:20 AS build
+# Використовуємо офіційний Node.js образ
+FROM node:20
 
-# Налаштовуємо робочий каталог
-WORKDIR /app
+# Встановлюємо робочу директорію
+WORKDIR /var/www/frontend
 
-# Копіюємо package.json і package-lock.json
+# Копіюємо package.json та package-lock.json
 COPY package*.json ./
 
 # Встановлюємо залежності
 RUN npm install
 
-# Копіюємо код проєкту
+# Копіюємо інші файли додатку
 COPY . .
 
-# Створюємо продакшн-версію
+# Збірка Vue.js додатку
 RUN npm run build
 
-# Вибираємо базовий образ для веб-сервера
+# Використовуємо Nginx для розгортання
 FROM nginx:alpine
+COPY --from=0 /var/www/frontend/dist /usr/share/nginx/html
 
-# Копіюємо продакшн-версію з попереднього етапу
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Виставляємо порт
+# Експонуємо порт
 EXPOSE 80
 
 # Запускаємо Nginx
