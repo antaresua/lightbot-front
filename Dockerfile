@@ -1,5 +1,6 @@
-# Використовуємо офіційний Node.js образ
-FROM node:20
+# Dockerfile для Vue.js
+
+FROM node:20 as build-stage
 
 # Встановлюємо робочу директорію
 WORKDIR /var/www/frontend
@@ -13,12 +14,12 @@ RUN npm install
 # Копіюємо інші файли додатку
 COPY . .
 
-# Збірка Vue.js додатку
+# Збірка Vue.js додатку для продакшену
 RUN npm run build
 
 # Використовуємо Nginx для розгортання
-FROM nginx:alpine
-COPY --from=0 /var/www/frontend/dist /usr/share/nginx/html
+FROM nginx:alpine as production-stage
+COPY --from=build-stage /var/www/frontend/dist /usr/share/nginx/html
 
 # Експонуємо порт
 EXPOSE 80
