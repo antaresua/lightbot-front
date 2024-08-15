@@ -26,7 +26,7 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Відкриваємо порт 80 для NGINX
-EXPOSE 80
+EXPOSE 80 443
 
 # Запускаємо NGINX
 CMD ["nginx", "-g", "daemon off;"]
