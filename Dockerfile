@@ -23,7 +23,7 @@ FROM nginx:alpine
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Копіюємо конфігураційний файл NGINX
-COPY ./docker/nginx/default.conf /etc/nginx/default.conf
+COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Відкриваємо порт 80 для NGINX
 EXPOSE 80
