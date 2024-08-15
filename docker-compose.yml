@@ -4,9 +4,15 @@ services:
     web:
         build: .
         container_name: lightbot-frontend
-        ports:
-            - "80:80"
-            - "443:443"
+        environment:
+            - VIRTUAL_HOST=bot.bondarenkoid.dev
+            - VIRTUAL_PORT=80
         volumes:
             - ./docker/certs:/etc/nginx/certs
         restart: always
+        networks:
+            - frontend
+
+networks:
+    frontend:
+        external: true
