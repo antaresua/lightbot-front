@@ -4,9 +4,6 @@ services:
     web:
         build: .
         container_name: lightbot-frontend
-        environment:
-            - VIRTUAL_HOST=bot.bondarenkoid.dev
-            - VIRTUAL_PORT=80
         volumes:
             - ./docker/certs:/etc/nginx/certs
         restart: always
