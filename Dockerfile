@@ -1,30 +1,32 @@
-# Dockerfile для Vue.js
+# 1. Базовий образ для збірки додатку
+FROM node:18-alpine as build-stage
 
-FROM node:20 as build-stage
+# Встановлюємо робочий каталог
+WORKDIR /app
 
-# Встановлюємо робочу директорію
-WORKDIR /var/www/frontend
-
-# Копіюємо package.json та package-lock.json
+# Копіюємо package.json і package-lock.json
 COPY package*.json ./
 
 # Встановлюємо залежності
 RUN npm install
 
-# Копіюємо інші файли додатку
+# Копіюємо решту файлів додатку
 COPY . .
 
-# Збірка Vue.js додатку для продакшену
+# Виконуємо збірку додатку
 RUN npm run build
 
-# Використовуємо Nginx для розгортання
-FROM nginx:alpine as production-stage
-COPY --from=build-stage /var/www/frontend/dist /usr/share/nginx/html
+# 2. Базовий образ для продакшн
+FROM nginx:alpine
 
-WORKDIR /usr/share/nginx/html
+# Копіюємо зібрані файли з етапу збірки у NGINX
+COPY --from=build-stage /app/dist /usr/share/nginx/html
 
-# Експонуємо порт
+# Копіюємо конфігураційний файл NGINX
+COPY ./nginx.conf /etc/nginx/nginx.conf
+
+# Відкриваємо порт 80 для NGINX
 EXPOSE 80
 
-# Запускаємо Nginx
+# Запускаємо NGINX
 CMD ["nginx", "-g", "daemon off;"]
