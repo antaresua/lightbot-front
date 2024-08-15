@@ -21,6 +21,8 @@ RUN npm run build
 FROM nginx:alpine as production-stage
 COPY --from=build-stage /var/www/frontend/dist /usr/share/nginx/html
 
+WORKDIR /usr/share/nginx/html
+
 # Експонуємо порт
 EXPOSE 80
 
