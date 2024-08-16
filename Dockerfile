@@ -24,6 +24,7 @@ COPY --from=build-stage /app/dist /usr/share/nginx/html
 
 # Копіюємо конфігураційний файл NGINX
 COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+#COPY ../backend /var/www/html
 
 # Відкриваємо порт 80 для NGINX
 EXPOSE 80 443
