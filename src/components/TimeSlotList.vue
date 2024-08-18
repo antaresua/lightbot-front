@@ -249,4 +249,8 @@ export default {
     color: #aaa;
     cursor: not-allowed;
 }
+
+.time-slots-table td button {
+    display: inline-block;
+}
 </style>
