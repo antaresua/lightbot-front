@@ -1,23 +1,17 @@
 <template>
-    <div class="table-container">
-        <h2 style="text-align: center; font-weight: bold; font-size: 20px;">Лог подій</h2>
+    <div :class="['table-container', { 'dark-theme': isDarkTheme }]">
+        <h2 class="table-title" style="font-weight: bold;">Лог подій</h2>
         <table class="status-table">
             <thead>
                 <tr>
-                    <!-- <th @click="sortTable('id')" class="narrow-col">ID</th> -->
                     <th @click="sortTable('createdAt')">Дата</th>
                     <th @click="sortTable('status')">Статус</th>
-                    <!-- <th class="narrow-col">Дії</th> -->
                 </tr>
             </thead>
             <tbody>
                 <tr v-for="status in paginatedStatuses" :key="status.id">
-                    <!-- <td class="narrow-col">{{ status.id }}</td> -->
                     <td>{{ status.createdAt }}</td>
                     <td>{{ getStatusLabel(status.status) }}</td>
-                    <!-- <td class="narrow-col">
-                        <button @click="deleteStatus(status.id)" class="btn btn-red">Видалити</button>
-                    </td> -->
                 </tr>
             </tbody>
         </table>
@@ -39,11 +33,13 @@ export default {
             sortKey: '',
             sortOrder: 'asc',
             currentPage: 1,
-            itemsPerPage: 5 // Кількість елементів на сторінку
+            itemsPerPage: 5,
+            isDarkTheme: false // додано для контролю теми
         };
     },
     created() {
         this.fetchStatuses();
+        this.checkTheme();
     },
     computed: {
         sortedStatuses() {
@@ -103,16 +99,31 @@ export default {
                         console.error('There was an error deleting the status!', error);
                     });
             }
+        },
+        checkTheme() {
+            // Логіка для перевірки та зміни теми
+            // Наприклад, перевіряємо локальні збереження
+            this.isDarkTheme = localStorage.getItem('theme') === 'dark';
         }
     }
 };
 </script>
 
 <style scoped>
+.table-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
 .table-container {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 1200px;
+    margin: 20px auto;
     padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .status-table {
@@ -123,21 +134,23 @@ export default {
 .status-table th,
 .status-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px;
     text-align: center;
+    font-size: 14px;
 }
 
 .status-table th {
     background-color: #f2f2f2;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .status-table th:hover {
-    background-color: #ddd;
+    background-color: #e0e0e0;
 }
 
 .status-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #fafafa;
 }
 
 .status-table tr:hover {
@@ -145,20 +158,22 @@ export default {
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     margin: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 .btn-red {
-    background-color: #ff0000;
+    background-color: #ff5722;
     color: white;
 }
 
 .btn-red:hover {
-    background-color: #cc0000;
+    background-color: #e64a19;
 }
 
 .pagination {
@@ -169,14 +184,15 @@ export default {
 }
 
 .pagination button {
-    margin: 0 10px;
-    padding: 5px 10px;
+    margin: 0 8px;
+    padding: 6px 12px;
     font-size: 16px;
-    background-color: white;
+    background-color: #ffffff;
     color: #007bff;
     border: 1px solid #007bff;
     border-radius: 4px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .pagination button:hover {
@@ -185,8 +201,46 @@ export default {
 }
 
 .pagination button:disabled {
-    background-color: #eee;
+    background-color: #e0e0e0;
     color: #aaa;
     cursor: not-allowed;
+}
+
+/* Темна тема */
+.dark-theme .table-container {
+    background-color: #333;
+    color: #ddd;
+}
+
+.dark-theme .status-table th,
+.dark-theme .status-table td {
+    border-color: #555;
+}
+
+.dark-theme .status-table th {
+    background-color: #444;
+}
+
+.dark-theme .status-table tr:nth-child(even) {
+    background-color: #444;
+}
+
+.dark-theme .status-table tr:hover {
+    background-color: #555;
+}
+
+.dark-theme .pagination button {
+    background-color: #444;
+    color: #ddd;
+    border-color: #555;
+}
+
+.dark-theme .pagination button:hover {
+    background-color: #555;
+}
+
+.dark-theme .pagination button:disabled {
+    background-color: #666;
+    color: #888;
 }
 </style>

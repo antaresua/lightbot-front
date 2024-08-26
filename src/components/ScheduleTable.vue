@@ -142,15 +142,19 @@ export default {
 
 <style scoped>
 .table-container {
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 1200px;
+    margin: 20px auto;
     padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .table-title {
     text-align: center;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
 }
 
 .table-wrapper {
@@ -160,59 +164,55 @@ export default {
 .time-slots-table {
     width: 100%;
     border-collapse: collapse;
-    table-layout: auto;
 }
 
 .time-slots-table th,
 .time-slots-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 12px;
     text-align: center;
-    word-break: break-word;
+    font-size: 14px;
 }
 
 .time-slots-table th {
     background-color: #f2f2f2;
     font-weight: bold;
-    font-size: 16px;
 }
 
 .time-slots-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #fafafa;
 }
 
 .highlight-row {
     background-color: #e2e2e2;
-    border: 2px solid yellow;
+    border: 2px solid #ffbb00;
 }
 
 .highlight-cell {
-    background-color: #696969 !important;
+    background-color: #8ff376 !important;
 }
 
 .cell-on {
-    background-color: white;
-    color: black;
+    background-color: #e8f5e9;
+    color: #388e3c;
 }
 
 .cell-off {
-    background-color: rgba(204, 206, 207, .67);
-    color: black;
+    background-color: #fce4ec;
+    color: #d32f2f;
     background-image: url('../assets/no-electricity.png');
-    background-size: 15.75px 15.75px;
+    background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: center;
-    border: 1px solid #ddd;
 }
 
 .cell-possible-on {
-    background-color: rgba(204, 206, 207, .33);
-    color: black;
+    background-color: #e3f2fd;
+    color: #0288d1;
     background-image: url('../assets/maybe-electricity.png');
-    background-size: 15.75px 15.75px;
+    background-size: 20px 20px;
     background-repeat: no-repeat;
     background-position: center;
-    border: 1px solid #ddd;
 }
 
 .time-slots-header {
@@ -224,7 +224,7 @@ export default {
     position: relative;
     text-align: center;
     vertical-align: middle;
-    padding: 15px;
+    padding: 10px;
     white-space: nowrap;
 }
 
@@ -236,7 +236,7 @@ export default {
     transform: translate(-50%, -50%) rotate(-90deg);
     transform-origin: center;
     white-space: nowrap;
-    font-size: 14px;
+    font-size: 12px;
     display: block;
 }
 
@@ -261,23 +261,12 @@ export default {
 }
 
 .legend-color {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
     display: inline-block;
-    margin-right: 5px;
+    margin-right: 8px;
     border: 1px solid #ddd;
-}
-
-.cell-off {
-    background-color: rgba(204, 206, 207, .67);
-}
-
-.cell-possible-on {
-    background-color: rgba(204, 206, 207, .33);
-}
-
-.cell-on {
-    background-color: white;
+    border-radius: 4px;
 }
 
 .subscribe-button-container {
@@ -286,49 +275,41 @@ export default {
 }
 
 .subscribe-button {
-    background-color: #4CAF50;
-    /* Змінює фон кнопки на зелений */
+    background-color: #4caf50;
     color: white;
-    /* Колір тексту залишається білим */
-    padding: 10px 20px;
+    padding: 12px 24px;
     border: none;
-    border-radius: 5px;
+    border-radius: 6px;
     cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .subscribe-button:hover {
     background-color: #45a049;
-    /* Змінює фон кнопки на темніший зелений при наведенні */
 }
 
 .note {
     font-size: 14px;
     color: #555;
     text-align: center;
-    /* Вирівнювання тексту по центру */
-    margin: 0 auto;
-    /* Автоматичні відступи для центрування */
-    max-width: 50%;
-    /* Максимальна ширина для адаптивності */
-    padding: 0 20px;
-    /* Додаткові відступи з боків, якщо потрібно */
+    margin: 10px auto;
+    max-width: 60%;
+    padding: 10px;
 }
 
-/* Медіа-запити для мобільних пристроїв */
 @media (max-width: 768px) {
     .time-slots-table th.rotate-text::before {
-        font-size: 12px;
-        /* Зменште розмір шрифту для кращої адаптації */
+        font-size: 10px;
     }
 
     .day-name {
         font-size: 12px;
-        /* Зменште розмір шрифту для кращої адаптації */
     }
 
     .legend-item {
         font-size: 12px;
-        /* Зменште розмір шрифту для кращої адаптації */
     }
 }
+
 </style>
