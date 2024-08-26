@@ -132,10 +132,30 @@ export default {
         },
         subscribeToTelegram() {
             window.location.href = 'https://t.me/svitlobot_em_e2a'; // Додайте посилання на ваш Telegram канал
+        },
+        highlightCurrentTime() {
+            const now = new Date();
+            const currentDayOfWeek = now.getDay();
+            const currentHour = now.getHours();
+            console.log(currentHour)
+
+            // Знайти рядок для поточного дня
+            const dayRow = this.$el.querySelector(`tbody tr:nth-child(${currentDayOfWeek})`);
+            if (dayRow) {
+                this.highlightRow({ currentTarget: dayRow });
+            }
+
+            // Знайти клітинку для поточної години
+            const hourCells = dayRow ? dayRow.querySelectorAll('td') : [];
+            const hourCell = hourCells[currentHour];
+            if (hourCell) {
+                this.highlightCell({ currentTarget: hourCell });
+            }
         }
     },
     mounted() {
         this.fetchTimeSlots();
+        this.highlightCurrentTime();
     },
 }
 </script>
@@ -311,5 +331,4 @@ export default {
         font-size: 12px;
     }
 }
-
 </style>
