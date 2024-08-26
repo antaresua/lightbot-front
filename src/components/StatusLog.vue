@@ -77,7 +77,7 @@ export default {
                 });
         },
         getStatusLabel(status) {
-            return status === 'on' ? 'Ввімкнення' : 'Вимкнення';
+            return status === 'on' ? '✅ Ввімкнення' : '🛑 Вимкнення';
         },
         sortTable(key) {
             this.sortOrder = this.sortKey === key && this.sortOrder === 'asc' ? 'desc' : 'asc';
