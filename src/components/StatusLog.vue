@@ -1,6 +1,12 @@
 <template>
     <div class="table-container">
         <h2 class="table-title" style="font-weight: bold;">Лог подій</h2>
+        
+        <div class="current-status">
+            <h3>Поточний статус: {{ currentStatusLabel }}</h3>
+            <p>{{ duration }}</p>
+        </div>
+
         <table class="status-table">
             <thead>
                 <tr>
@@ -10,7 +16,7 @@
             </thead>
             <tbody>
                 <tr v-for="(status, index) in paginatedStatuses" :key="status.id" :class="{'highlight-row': index === 0}">
-                    <td>{{ status.createdAt }}</td>
+                    <td>{{ formatDate(status.createdAt) }}</td>
                     <td>{{ getStatusLabel(status.status) }}</td>
                 </tr>
             </tbody>
@@ -34,22 +40,19 @@ export default {
             sortOrder: 'asc',
             currentPage: 1,
             itemsPerPage: 10,
+            currentStatus: null,
+            currentStatusChangeTime: null,
+            timer: null,
         };
     },
     created() {
         this.fetchStatuses();
+        this.calculateCurrentStatus();
+        this.startTimer();
     },
     computed: {
         sortedStatuses() {
-            return this.statuses.slice().sort((a, b) => {
-                let result = 0;
-                if (a[this.sortKey] < b[this.sortKey]) {
-                    result = -1;
-                } else if (a[this.sortKey] > b[this.sortKey]) {
-                    result = 1;
-                }
-                return this.sortOrder === 'asc' ? result : -result;
-            });
+            return this.statuses.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         },
         paginatedStatuses() {
             const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -58,6 +61,37 @@ export default {
         },
         totalPages() {
             return Math.ceil(this.statuses.length / this.itemsPerPage);
+        },
+        currentStatusLabel() {
+            if (this.currentStatus) {
+                return this.currentStatus === 'on' ? '🟢 Ввімкнено' : '🔴 Вимкнено';
+            }
+            return 'Немає даних';
+        },
+        duration() {
+            if (this.currentStatusChangeTime) {
+                const now = new Date();
+                const durationInMs = now - this.currentStatusChangeTime;
+                const days = Math.floor(durationInMs / (24 * 60 * 60 * 1000));
+                const hours = Math.floor((durationInMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                const minutes = Math.floor((durationInMs % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((durationInMs % (60 * 1000)) / 1000);
+                
+                let durationString = '';
+                if (days > 0) {
+                    durationString += `${days} днів `;
+                }
+                if (hours > 0 || days > 0) {
+                    durationString += `${hours} год `;
+                }
+                if (minutes > 0 || hours > 0 || days > 0) {
+                    durationString += `${minutes} хв `;
+                }
+                durationString += `${seconds} сек`;
+                
+                return durationString;
+            }
+            return '0 сек';
         }
     },
     methods: {
@@ -65,13 +99,14 @@ export default {
             apiService.getStatuses()
                 .then(response => {
                     this.statuses = response.data;
+                    this.calculateCurrentStatus();
                 })
                 .catch(error => {
                     console.error('There was an error fetching the statuses!', error);
                 });
         },
         getStatusLabel(status) {
-            return status === 'on' ? '🟢 Ввімкнено' : '🔴 Вимкнено ';
+            return status === 'on' ? '🟢 Ввімкнено' : '🔴 Вимкнено';
         },
         sortTable(key) {
             this.sortOrder = this.sortKey === key && this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -97,6 +132,27 @@ export default {
                         console.error('There was an error deleting the status!', error);
                     });
             }
+        },
+        calculateCurrentStatus() {
+            if (this.statuses.length) {
+                const latestStatus = this.statuses[0]; // Найновіший статус
+                this.currentStatus = latestStatus.status;
+                this.currentStatusChangeTime = new Date(latestStatus.createdAt);
+            }
+        },
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString(); // Форматування дати для відображення
+        },
+        startTimer() {
+            this.timer = setInterval(() => {
+                this.calculateCurrentStatus(); // Оновлюємо статус
+            }, 1000); // Оновлюємо кожну секунду
+        }
+    },
+    beforeUnmount() {
+        if (this.timer) {
+            clearInterval(this.timer);
         }
     }
 };
@@ -201,5 +257,26 @@ export default {
     background-color: #e0e0e0;
     color: #aaa;
     cursor: not-allowed;
+}
+
+.current-status {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.current-status h3 {
+    margin: 0;
+    color: #333;
+    font-size: 18px;
+}
+
+.current-status p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
 }
 </style>
