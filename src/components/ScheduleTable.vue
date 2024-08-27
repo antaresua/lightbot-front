@@ -13,7 +13,7 @@
                     <tr v-for="day in sortedDays" :key="day.name" @mouseover="highlightRow($event)"
                         @mouseout="removeHighlight($event)">
                         <td colspan="2" class="day-name">{{ day.name }}</td>
-                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.originalDayOfWeek, hour)"
+                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.dayOfWeek, hour)"
                             @mouseover="highlightCell($event)" @mouseout="removeCellHighlight($event)"></td>
                     </tr>
                 </tbody>
@@ -62,10 +62,11 @@ export default {
     },
     computed: {
         sortedDays() {
-            return [...this.days].map(day => ({
-                ...day,
-                originalDayOfWeek: day.dayOfWeek
-            })).sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+            // Сортуємо дні так, щоб Неділя буде останньою
+            const sorted = [...this.days].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
+            const sunday = sorted.find(day => day.dayOfWeek === 0);
+            const otherDays = sorted.filter(day => day.dayOfWeek !== 0);
+            return [...otherDays, sunday];
         }
     },
     methods: {
@@ -91,9 +92,9 @@ export default {
                 (slotStart > slotEnd && (hourFloat >= slotStart || hourFloat < slotEnd))
             );
         },
-        getClassForHour(originalDayOfWeek, hour) {
+        getClassForHour(dayOfWeek, hour) {
             const timeSlot = this.timeSlots.find(
-                slot => slot.startDay.dayOfWeek === originalDayOfWeek && this.isHourInTimeSlot(hour, slot)
+                slot => slot.startDay.dayOfWeek === dayOfWeek && this.isHourInTimeSlot(hour, slot)
             );
             return timeSlot ? this.getClassForTimeSlot(timeSlot.type) : '';
         },
@@ -130,9 +131,10 @@ export default {
         },
         highlightCurrentTime() {
             const now = new Date();
-            let currentDayOfWeek = now.getDay(); // Отримуємо день тижня (0 - неділя, 1 - понеділок, ... 6 - субота)
+            const currentDayOfWeek = now.getDay(); // Отримуємо день тижня (0 - неділя, 1 - понеділок, ... 6 - субота)
 
-            const dayRow = this.$el.querySelector(`tbody tr:nth-child(${currentDayOfWeek + 1})`);
+            // Додаємо 1 до індексу, щоб врахувати, що Неділя тепер в кінці
+            const dayRow = this.$el.querySelector(`tbody tr:nth-child(${(currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1) + 1})`);
             if (dayRow) {
                 this.highlightRow({ currentTarget: dayRow });
             }
@@ -144,7 +146,6 @@ export default {
     },
 }
 </script>
-
 <style scoped>
 .table-container {
     max-width: 1200px;
