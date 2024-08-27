@@ -130,24 +130,11 @@ export default {
         },
         highlightCurrentTime() {
             const now = new Date();
-            let currentDayOfWeek = now.getDay();
+            let currentDayOfWeek = now.getDay(); // Отримуємо день тижня (0 - неділя, 1 - понеділок, ... 6 - субота)
 
-            // Корекція для того, щоб понеділок був першим днем тижня (1 - понеділок, 7 - неділя)
-            if (currentDayOfWeek === 0) {
-                currentDayOfWeek = 7; // Зробимо неділю (0) останнім днем (7)
-            }
-
-            // Знайти рядок для поточного дня (1 - понеділок, 7 - неділя)
-            const dayRow = this.$el.querySelector(`tbody tr:nth-child(${currentDayOfWeek})`);
+            const dayRow = this.$el.querySelector(`tbody tr:nth-child(${currentDayOfWeek + 1})`);
             if (dayRow) {
                 this.highlightRow({ currentTarget: dayRow });
-            }
-
-            // Знайти клітинку для поточної години
-            const hourCells = dayRow ? dayRow.querySelectorAll('td') : [];
-            const hourCell = hourCells[now.getHours()]; // Індексація годин починається з 0 (0 - 00:00, 1 - 01:00, ..., 23 - 23:00)
-            if (hourCell) {
-                this.highlightCell({ currentTarget: hourCell });
             }
         }
     },
