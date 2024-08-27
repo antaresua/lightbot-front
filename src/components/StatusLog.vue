@@ -71,7 +71,7 @@ export default {
                 });
         },
         getStatusLabel(status) {
-            return status === 'on' ? '🟢 Ввімкнено' : '🔴 Вимкнено';
+            return status === 'on' ? '🟢 Ввімкнено' : '🔴 Вимкнено ';
         },
         sortTable(key) {
             this.sortOrder = this.sortKey === key && this.sortOrder === 'asc' ? 'desc' : 'asc';
