@@ -17,7 +17,6 @@ export default {
         return apiClient.get(`/days/${id}`);
     },
     createDays(days) {
-        console.log(days);
         return apiClient.post('/days', days);
     },
     updateDay(id, day) {

@@ -1,5 +1,5 @@
 <template>
-    <div :class="['table-container', { 'dark-theme': isDarkTheme }]">
+    <div class="table-container">
         <h2 class="table-title" style="font-weight: bold;">Лог подій</h2>
         <table class="status-table">
             <thead>
@@ -9,7 +9,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="status in paginatedStatuses" :key="status.id">
+                <tr v-for="(status, index) in paginatedStatuses" :key="status.id" :class="{'highlight-row': index === 0}">
                     <td>{{ status.createdAt }}</td>
                     <td>{{ getStatusLabel(status.status) }}</td>
                 </tr>
@@ -33,13 +33,11 @@ export default {
             sortKey: '',
             sortOrder: 'asc',
             currentPage: 1,
-            itemsPerPage: 5,
-            isDarkTheme: false // додано для контролю теми
+            itemsPerPage: 10,
         };
     },
     created() {
         this.fetchStatuses();
-        this.checkTheme();
     },
     computed: {
         sortedStatuses() {
@@ -73,7 +71,7 @@ export default {
                 });
         },
         getStatusLabel(status) {
-            return status === 'on' ? '✅ Ввімкнення' : '🛑 Вимкнення';
+            return status === 'on' ? '🟢 Ввімкнено' : '🔴 Вимкнено';
         },
         sortTable(key) {
             this.sortOrder = this.sortKey === key && this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -99,11 +97,6 @@ export default {
                         console.error('There was an error deleting the status!', error);
                     });
             }
-        },
-        checkTheme() {
-            // Логіка для перевірки та зміни теми
-            // Наприклад, перевіряємо локальні збереження
-            this.isDarkTheme = localStorage.getItem('theme') === 'dark';
         }
     }
 };
@@ -157,6 +150,10 @@ export default {
     background-color: #e2e2e2;
 }
 
+.highlight-row {
+    border: 2px solid #ffbb00;
+}
+
 .btn {
     padding: 8px 16px;
     border: none;
@@ -204,43 +201,5 @@ export default {
     background-color: #e0e0e0;
     color: #aaa;
     cursor: not-allowed;
-}
-
-/* Темна тема */
-.dark-theme .table-container {
-    background-color: #333;
-    color: #ddd;
-}
-
-.dark-theme .status-table th,
-.dark-theme .status-table td {
-    border-color: #555;
-}
-
-.dark-theme .status-table th {
-    background-color: #444;
-}
-
-.dark-theme .status-table tr:nth-child(even) {
-    background-color: #444;
-}
-
-.dark-theme .status-table tr:hover {
-    background-color: #555;
-}
-
-.dark-theme .pagination button {
-    background-color: #444;
-    color: #ddd;
-    border-color: #555;
-}
-
-.dark-theme .pagination button:hover {
-    background-color: #555;
-}
-
-.dark-theme .pagination button:disabled {
-    background-color: #666;
-    color: #888;
 }
 </style>

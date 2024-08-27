@@ -65,12 +65,7 @@ export default {
             return [...this.days].map(day => ({
                 ...day,
                 originalDayOfWeek: day.dayOfWeek
-            })
-            ).sort((a, b) => {
-                if (a.dayOfWeek === 0) return 1;
-                if (b.dayOfWeek === 0) return -1;
-                return a.dayOfWeek - b.dayOfWeek;
-            });
+            })).sort((a, b) => a.dayOfWeek - b.dayOfWeek);
         }
     },
     methods: {
@@ -135,11 +130,14 @@ export default {
         },
         highlightCurrentTime() {
             const now = new Date();
-            const currentDayOfWeek = now.getDay();
-            const currentHour = now.getHours();
-            console.log(currentHour)
+            let currentDayOfWeek = now.getDay();
 
-            // Знайти рядок для поточного дня
+            // Корекція для того, щоб понеділок був першим днем тижня (1 - понеділок, 7 - неділя)
+            if (currentDayOfWeek === 0) {
+                currentDayOfWeek = 7; // Зробимо неділю (0) останнім днем (7)
+            }
+
+            // Знайти рядок для поточного дня (1 - понеділок, 7 - неділя)
             const dayRow = this.$el.querySelector(`tbody tr:nth-child(${currentDayOfWeek})`);
             if (dayRow) {
                 this.highlightRow({ currentTarget: dayRow });
@@ -147,7 +145,7 @@ export default {
 
             // Знайти клітинку для поточної години
             const hourCells = dayRow ? dayRow.querySelectorAll('td') : [];
-            const hourCell = hourCells[currentHour];
+            const hourCell = hourCells[now.getHours()]; // Індексація годин починається з 0 (0 - 00:00, 1 - 01:00, ..., 23 - 23:00)
             if (hourCell) {
                 this.highlightCell({ currentTarget: hourCell });
             }
@@ -179,6 +177,7 @@ export default {
 
 .table-wrapper {
     overflow-x: auto;
+    width: 100%;
 }
 
 .time-slots-table {
@@ -192,6 +191,8 @@ export default {
     padding: 12px;
     text-align: center;
     font-size: 14px;
+    min-width: 40px;
+    width: 40px;
 }
 
 .time-slots-table th {
@@ -323,12 +324,53 @@ export default {
         font-size: 10px;
     }
 
+    .time-slots-table th,
+    .time-slots-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+        font-size: 14px;
+        min-width: 35px;
+        width: 35px;
+    }
+
+    .cell-off,
+    .cell-possible-on {
+        background-size: 15px 15px;
+    }
+
     .day-name {
         font-size: 12px;
     }
 
     .legend-item {
         font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+
+    .time-slots-table th,
+    .time-slots-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: center;
+        font-size: 14px;
+        min-width: 25px;
+        width: 25px;
+    }
+
+    .cell-off,
+    .cell-possible-on {
+        background-size: 12px 12px;
+    }
+
+    .day-name {
+        font-size: 10px;
+    }
+
+    .legend-item {
+        font-size: 10px;
     }
 }
 </style>
