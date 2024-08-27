@@ -1,9 +1,9 @@
 <template>
     <div class="table-container">
         <h2 class="table-title" style="font-weight: bold;">Лог подій</h2>
-        
+
         <div class="current-status">
-            <h3>Поточний статус: {{ currentStatusLabel }}</h3>
+            <h3>Поточний статус: <span v-html="currentStatusLabel"></span></h3>
             <p>{{ duration }}</p>
         </div>
 
@@ -15,9 +15,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(status, index) in paginatedStatuses" :key="status.id" :class="{'highlight-row': index === 0}">
+                <tr v-for="(status, index) in paginatedStatuses" :key="status.id"
+                    :class="{ 'highlight-row': index === 0 }">
                     <td>{{ formatDate(status.createdAt) }}</td>
-                    <td>{{ getStatusLabel(status.status) }}</td>
+                    <td v-html="getStatusLabel(status.status)"></td>
                 </tr>
             </tbody>
         </table>
@@ -76,7 +77,7 @@ export default {
                 const hours = Math.floor((durationInMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
                 const minutes = Math.floor((durationInMs % (60 * 60 * 1000)) / (60 * 1000));
                 const seconds = Math.floor((durationInMs % (60 * 1000)) / 1000);
-                
+
                 let durationString = '';
                 if (days > 0) {
                     durationString += `${days} днів `;
@@ -88,7 +89,7 @@ export default {
                     durationString += `${minutes} хв `;
                 }
                 durationString += `${seconds} сек`;
-                
+
                 return durationString;
             }
             return '0 сек';
@@ -106,7 +107,9 @@ export default {
                 });
         },
         getStatusLabel(status) {
-            return status === 'on' ? '🟢 Ввімкнено' : '🔴 Вимкнено';
+            return status === 'on'
+                ? '<span class="status-icon">🟢</span> <span class="status-text">Ввімкнено</span>'
+                : '<span class="status-icon">🔴</span> <span class="status-text">Вимкнено</span>';
         },
         sortTable(key) {
             this.sortOrder = this.sortKey === key && this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -175,37 +178,6 @@ export default {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.status-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.status-table th,
-.status-table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-    font-size: 14px;
-}
-
-.status-table th {
-    background-color: #f2f2f2;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.status-table th:hover {
-    background-color: #e0e0e0;
-}
-
-.status-table tr:nth-child(even) {
-    background-color: #fafafa;
-}
-
-.status-table tr:hover {
-    background-color: #e2e2e2;
-}
-
 .highlight-row {
     border: 2px solid #ffbb00;
 }
@@ -259,6 +231,49 @@ export default {
     cursor: not-allowed;
 }
 
+.status-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.status-table th,
+.status-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.status-table th {
+    background-color: #f2f2f2;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.status-table th:hover {
+    background-color: #e0e0e0;
+}
+
+.status-table tr:nth-child(even) {
+    background-color: #fafafa;
+}
+
+.status-table tr:hover {
+    background-color: #e2e2e2;
+}
+
+.status-icon {
+    display: inline-block;
+    width: 24px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.status-text {
+    vertical-align: middle;
+    font-size: 16px;
+}
+
 .current-status {
     margin-bottom: 20px;
     padding: 10px;
@@ -266,12 +281,15 @@ export default {
     border-radius: 8px;
     text-align: center;
     font-size: 18px;
+    display: block;
 }
 
 .current-status h3 {
     margin: 0;
     color: #333;
     font-size: 18px;
+    display: block;
+    align-items: center;
 }
 
 .current-status p {
