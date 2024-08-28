@@ -11,9 +11,11 @@
                     </tr>
                 </thead>
                 <tbody v-if="days.length && timeSlots.length">
-                    <tr v-for="day in sortedDays" :key="day.dayOfWeek" @mouseover="highlightRow" @mouseout="removeHighlight">
+                    <tr v-for="day in sortedDays" :key="day.dayOfWeek" @mouseover="highlightRow"
+                        @mouseout="removeHighlight">
                         <td colspan="2" class="day-name">{{ day.name }}</td>
-                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.dayOfWeek, hour)" @mouseover="highlightCell" @mouseout="removeCellHighlight"></td>
+                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.dayOfWeek, hour)"
+                            @mouseover="highlightCell" @mouseout="removeCellHighlight"></td>
                     </tr>
                 </tbody>
                 <tbody v-else>
@@ -28,7 +30,8 @@
                 <thead v-if="days.length">
                     <tr>
                         <th class="rotate-text">Часові<br>проміжки</th>
-                        <th v-for="day in sortedDays" :key="day.dayOfWeek" class="rotate-text" :data-hour="day.name">
+                        <th v-for="day in sortedDays" :key="day.dayOfWeek" class="rotate-text" :data-hour="day.name"
+                            @click="highlightColumn(day.dayOfWeek)">
                         </th>
                     </tr>
                 </thead>
@@ -40,7 +43,8 @@
                 <tbody v-if="timeSlots.length">
                     <tr v-for="hour in hours" :key="hour">
                         <td>{{ hour }}</td>
-                        <td v-for="day in sortedDays" :key="day.dayOfWeek" :class="getClassForHour(day.dayOfWeek, hour)"></td>
+                        <td v-for="day in sortedDays" :key="day.dayOfWeek" :class="getClassForHour(day.dayOfWeek, hour)"
+                            @click="highlightColumn(day.dayOfWeek)"></td>
                     </tr>
                 </tbody>
                 <tbody v-else>
@@ -70,8 +74,6 @@
         </div>
     </div>
 </template>
-
-
 
 <script>
 import apiService from '../services/api';
@@ -208,13 +210,29 @@ export default {
             const currentHour = now.getHours();
 
             if (this.isMobile) {
-                // Виділення стовпця на мобільному
-                const dayColumnIndex = currentDayOfWeek === 0 ? 7 : currentDayOfWeek;
-                this.$el.querySelectorAll(`tbody tr td:nth-child(${dayColumnIndex + 1})`).forEach(cell => {
-                    cell.classList.add('highlight-column');
-                });
+                // Remove existing highlights
+                // this.$el.querySelectorAll('tbody tr td.highlight-column').forEach(cell => {
+                //     cell.classList.remove('highlight-column');
+                // });
+
+                // // Highlight the current column
+                // const dayColumnIndex = currentDayOfWeek === 0 ? 7 : currentDayOfWeek;
+                // this.$el.querySelectorAll(`tbody tr`).forEach(row => {
+                //     const cell = row.children[dayColumnIndex];
+                //     if (cell) {
+                //         cell.classList.add('highlight-column');
+                //     }
+                // });
             } else {
-                // Виділення рядка на десктопі
+                // Remove existing highlights
+                this.$el.querySelectorAll('tbody tr.highlight-row').forEach(row => {
+                    row.classList.remove('highlight-row');
+                });
+                this.$el.querySelectorAll('tbody tr td.highlight-cell').forEach(cell => {
+                    cell.classList.remove('highlight-cell');
+                });
+
+                // Highlight the current row and cell
                 const dayRowIndex = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
                 const dayRow = this.$el.querySelector(`tbody tr:nth-child(${dayRowIndex + 1})`);
                 if (dayRow) {
@@ -225,6 +243,19 @@ export default {
                     }
                 }
             }
+        },
+        highlightColumn(dayOfWeek) {
+            this.$el.querySelectorAll('tbody tr td.highlight-column').forEach(cell => {
+                cell.classList.remove('highlight-column');
+            });
+
+            const dayColumnIndex = dayOfWeek === 0 ? 7 : dayOfWeek; // Додайте 1 для врахування колонок часу
+            this.$el.querySelectorAll('tbody tr').forEach(row => {
+                const cell = row.children[dayColumnIndex];
+                if (cell) {
+                    // cell.classList.add('highlight-column');
+                }
+            });
         },
         checkIfMobile() {
             this.isMobile = window.innerWidth <= 768;
@@ -292,12 +323,10 @@ export default {
 }
 
 .highlight-row {
-    background-color: #e2e2e2;
     border: 2px solid #ffbb00;
 }
 
 .highlight-column {
-    background-color: #e2e2e2;
     border: 2px solid #ffbb00;
 }
 
@@ -413,6 +442,10 @@ th.rotate-text::before {
 
 /* Media Queries */
 @media (max-width: 768px) {
+    .highlight-column {
+        border: 2px solid #ffbb00 !important;
+    }
+
     .time-slots-table th.rotate-text {
         font-size: 12px;
         white-space: nowrap;
@@ -420,6 +453,7 @@ th.rotate-text::before {
         text-overflow: ellipsis;
         padding: 10px;
         height: 90px;
+        position: relative;
     }
 
     .time-slots-table td {
@@ -454,6 +488,22 @@ th.rotate-text::before {
 }
 
 @media (max-width: 480px) {
+    .highlight-column {
+        position: relative;
+    }
+
+    .highlight-column::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 187, 0, 0.3); /* Напівпрозорий фон */
+        z-index: 1; /* Залишити кольори з клітинки видимими */
+        pointer-events: none; /* Не перехоплює кліки */
+    }
+
     .time-slots-table th.rotate-text {
         font-size: 10px;
         white-space: nowrap;
@@ -461,6 +511,7 @@ th.rotate-text::before {
         text-overflow: ellipsis;
         padding: 6px;
         height: 70px;
+        position: relative;
     }
 
     .time-slots-table td {
