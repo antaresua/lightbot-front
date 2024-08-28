@@ -178,12 +178,12 @@ export default {
 }
 
 .btn-success {
-    background-color: #28a745;
+    background-color: #4ab441;
     color: white;
 }
 
 .btn-success:hover {
-    background-color: #218838;
+    background-color: #398831;
 }
 
 .btn-secondary {

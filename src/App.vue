@@ -21,7 +21,7 @@
                             <router-link class="nav-link" to="/statuses">Лог подій</router-link>
                         </li>
                         <!-- Додайте інші посилання на сторінки, якщо потрібно -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown disabled">
                             <a class="nav-link dropdown-toggle disabled" href="#" role="button"
                                 data-bs-toggle="dropdown" aria-expanded="false" aria-disabled="true">
                                 Управління графіком
@@ -55,15 +55,10 @@ body {
     background-image: none;
 }
 
-.nav-link {
-    color: #42b983 !important;
-}
-
 .nav-link.router-link-exact-active {
     font-weight: bold;
 }
 
-/* Видалення стандартних стилів Bootstrap для бургер-меню */
 .navbar-toggler.custom-toggler {
     border: none;
     background: transparent;
@@ -71,7 +66,6 @@ body {
     outline: none;
 }
 
-/* Прибираємо фокусний ефект для кнопки бургер-меню */
 .navbar-toggler.custom-toggler:focus {
     box-shadow: none;
     outline: none;
@@ -79,16 +73,17 @@ body {
 
 .navbar-toggler.custom-toggler .navbar-toggler-icon {
     background-image: none;
-    /* Прибирає стандартну іконку Bootstrap */
 }
 
 .navbar-toggler.custom-toggler .navbar-toggler-icon span {
     display: block;
     width: 30px;
     height: 3px;
-    background-color: #42b983;
-    /* Зелений колір ліній */
+    background-color: #4ab441;
     margin: 5px 0;
-    /* Відстань між лініями */
+}
+
+.disabled {
+    color: rgba(158, 158, 158, 0.3) !important;
 }
 </style>

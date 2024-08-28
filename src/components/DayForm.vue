@@ -118,26 +118,21 @@ export default {
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
-    /* Додано для забезпечення, що паддінги і бордери враховуються в ширині */
 }
 
 .form-buttons {
     display: flex;
     justify-content: space-between;
-    /* Розміщує кнопки по краях контейнера */
     margin-top: 20px;
-    /* Додає відступ зверху */
 }
 
 .btn-left {
     margin-right: auto;
-    /* Виштовхує кнопку "Додати ще один день" на ліву сторону */
 }
 
 .btn-group-right {
     display: flex;
     gap: 10px;
-    /* Відстань між кнопками */
 }
 
 .btn {
@@ -166,12 +161,12 @@ export default {
 }
 
 .btn-success {
-    background-color: #28a745;
+    background-color: #4ab441;
     color: white;
 }
 
 .btn-success:hover {
-    background-color: #218838;
+    background-color: #398831;
 }
 
 .btn-secondary {

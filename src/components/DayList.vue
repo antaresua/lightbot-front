@@ -106,7 +106,6 @@ export default {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
-    /* Центрування тексту у ячейках */
 }
 
 .days-table th {
@@ -144,12 +143,12 @@ export default {
 }
 
 .btn-success {
-    background-color: #28a745;
+    background-color: #4ab441;
     color: white;
 }
 
 .btn-success:hover {
-    background-color: #218838;
+    background-color: #398831;
 }
 
 .btn-danger {
@@ -173,11 +172,9 @@ export default {
 .add-button-container {
     margin-top: 20px;
     padding: 0;
-    /* Видалення відступів */
 }
 
 .add-button-container .btn {
     margin-left: 0;
-    /* Щоб кнопка не мала відступів зліва */
 }
 </style>

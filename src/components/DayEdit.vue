@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import apiService from '../services/api'; // Імпортуйте ваш API сервіс
+import apiService from '../services/api';
 
 export default {
     props: {
@@ -32,13 +32,13 @@ export default {
     },
     data() {
         return {
-            day: { name: '', dayOfWeek: '' }, // Початкове поле для одного дня
+            day: { name: '', dayOfWeek: '' },
         };
     },
     created() {
         apiService.getDay(this.id)
             .then(response => {
-                this.day = response.data; // Завантаження даних для редагування
+                this.day = response.data;
             })
             .catch(error => {
                 console.error('There was an error fetching the day!', error);
@@ -90,15 +90,12 @@ export default {
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
-    /* Додано для забезпечення, що паддінги і бордери враховуються в ширині */
 }
 
 .form-buttons {
     display: flex;
     justify-content: space-between;
-    /* Розміщує кнопки по краях контейнера */
     margin-top: 20px;
-    /* Додає відступ зверху */
 }
 
 .btn {
@@ -107,17 +104,14 @@ export default {
     border-radius: 4px;
     cursor: pointer;
     box-sizing: border-box;
-    /* Додає паддінги і бордери в ширину */
 }
 
 .btn-left {
     margin-right: auto;
-    /* Виштовхує кнопку на ліву сторону */
 }
 
 .btn-right {
     margin-left: auto;
-    /* Виштовхує кнопку на праву сторону */
 }
 
 .btn-primary {
@@ -139,12 +133,12 @@ export default {
 }
 
 .btn-success {
-    background-color: #28a745;
+    background-color: #4ab441;
     color: white;
 }
 
 .btn-success:hover {
-    background-color: #218838;
+    background-color: #398831;
 }
 
 .btn-secondary {

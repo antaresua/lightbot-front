@@ -10,8 +10,7 @@
                     </tr>
                 </thead>
                 <tbody v-if="days.length">
-                    <tr v-for="day in sortedDays" :key="day.dayOfWeek" @mouseover="highlightRow"
-                        @mouseout="removeHighlight">
+                    <tr v-for="day in sortedDays" :key="day.dayOfWeek" @mouseover="highlightRow" @mouseout="removeHighlight">
                         <td colspan="2" class="day-name">{{ day.name }}</td>
                         <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.dayOfWeek, hour)"
                             @mouseover="highlightCell" @mouseout="removeCellHighlight">
@@ -25,21 +24,22 @@
                 </tbody>
             </table>
         </div>
-        <div class="legend">
-            <div class="legend-item">
-                <span class="legend-color cell-off"></span> - Відключення світла
-            </div>
-            <div class="legend-item">
-                <span class="legend-color cell-possible-on"></span> - Можливе включення
-            </div>
-            <div class="legend-item">
-                <span class="legend-color cell-on"></span> - Світло є
+        <div class="legend-container">
+            <div class="legend">
+                <div class="legend-item">
+                    <span class="legend-color cell-off"></span> - Відключення світла
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color cell-possible-on"></span> - Можливе включення
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color cell-on"></span> - Світло є
+                </div>
             </div>
         </div>
         <div class="subscribe-button-container">
             <button class="subscribe-button" @click="subscribeToTelegram">Підписатись на Telegram</button>
-            <p class="note">* підписуйтесь, щоб отримувати сповіщення про відключення/включення світла в реальному часі
-            </p>
+            <p class="note">* підписуйтесь, щоб отримувати сповіщення про відключення/включення світла в реальному часі</p>
         </div>
     </div>
 </template>
@@ -250,85 +250,87 @@ export default {
     transform: translate(-50%, -50%) rotate(-90deg);
     transform-origin: center;
     white-space: nowrap;
-    font-size: 14px;
-    display: block;
 }
 
-.day-name {
-    font-size: 14px;
-    white-space: nowrap;
+.legend-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .legend {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin-top: 20px;
 }
 
 .legend-item {
+    margin-right: 20px;
+    font-size: 14px;
     display: flex;
     align-items: center;
-    margin: 5px;
-    font-size: 14px;
 }
 
 .legend-color {
-    width: 24px;
-    height: 24px;
     display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
     margin-right: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+}
+
+.cell-off.legend-color {
+    background-color: #fce4ec;
+}
+
+.cell-possible-on.legend-color {
+    background-color: #e3f2fd;
+}
+
+.cell-on.legend-color {
+    background-color: #e8f5e9;
 }
 
 .subscribe-button-container {
     text-align: center;
-    margin-top: 20px;
 }
 
 .subscribe-button {
-    background-color: #4caf50;
+    background-color: #4ab441;
     color: white;
-    padding: 12px 24px;
     border: none;
-    border-radius: 6px;
-    cursor: pointer;
+    border-radius: 5px;
+    padding: 10px 20px;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
 .subscribe-button:hover {
-    background-color: #45a049;
+    background-color: #398831;
 }
 
 .note {
-    font-size: 14px;
-    color: #555;
-    text-align: center;
-    margin: 10px auto;
-    max-width: 60%;
-    padding: 10px;
+    font-size: 12px;
+    color: #666;
+    margin-top: 10px;
 }
 
+/* Media Queries */
 @media (max-width: 768px) {
-    .time-slots-table th.rotate-text::before {
-        font-size: 10px;
-    }
-
     .time-slots-table th,
     .time-slots-table td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: center;
         font-size: 14px;
-        min-width: 35px;
-        width: 35px;
+        padding: 8px;
+    }
+
+    .time-slots-table th.rotate-text::before {
+        font-size: 12px;
     }
 
     .cell-off,
     .cell-possible-on {
-        background-size: 15px 15px;
+        background-size: 12px 12px;
     }
 
     .day-name {
@@ -338,18 +340,22 @@ export default {
     .legend-item {
         font-size: 12px;
     }
+
+    .subscribe-button {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
 }
 
 @media (max-width: 480px) {
+    .table-title {
+        font-size: 20px;
+    }
 
     .time-slots-table th,
     .time-slots-table td {
-        border: 1px solid #ddd;
-        padding: 7px;
-        text-align: center;
         font-size: 12px;
-        min-width: 25px;
-        width: 25px;
+        padding: 6px;
     }
 
     .cell-off,
@@ -363,6 +369,11 @@ export default {
 
     .legend-item {
         font-size: 10px;
+    }
+
+    .subscribe-button {
+        font-size: 12px;
+        padding: 8px 16px;
     }
 }
 </style>
