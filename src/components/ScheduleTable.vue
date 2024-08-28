@@ -2,19 +2,45 @@
     <div class="table-container">
         <h2 class="table-title" style="font-weight: bold;">Графік відключень</h2>
         <div class="table-wrapper">
-            <table class="time-slots-table">
+            <!-- Таблиця для десктопів -->
+            <table v-if="!isMobile" class="time-slots-table">
                 <thead>
                     <tr>
                         <th colspan="2" class="time-slots-header">Часові<br>проміжки</th>
                         <th v-for="hour in hours" :key="hour" class="rotate-text" :data-hour="hour"></th>
                     </tr>
                 </thead>
-                <tbody v-if="days.length">
+                <tbody v-if="days.length && timeSlots.length">
                     <tr v-for="day in sortedDays" :key="day.dayOfWeek" @mouseover="highlightRow" @mouseout="removeHighlight">
                         <td colspan="2" class="day-name">{{ day.name }}</td>
-                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.dayOfWeek, hour)"
-                            @mouseover="highlightCell" @mouseout="removeCellHighlight">
-                        </td>
+                        <td v-for="hour in hours" :key="hour" :class="getClassForHour(day.dayOfWeek, hour)" @mouseover="highlightCell" @mouseout="removeCellHighlight"></td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="2">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Таблиця для мобільних пристроїв -->
+            <table v-else class="time-slots-table">
+                <thead v-if="days.length">
+                    <tr>
+                        <th class="rotate-text">Часові<br>проміжки</th>
+                        <th v-for="day in sortedDays" :key="day.dayOfWeek" class="rotate-text" :data-hour="day.name">
+                        </th>
+                    </tr>
+                </thead>
+                <thead v-else>
+                    <tr>
+                        <th colspan="2">Loading...</th>
+                    </tr>
+                </thead>
+                <tbody v-if="timeSlots.length">
+                    <tr v-for="hour in hours" :key="hour">
+                        <td>{{ hour }}</td>
+                        <td v-for="day in sortedDays" :key="day.dayOfWeek" :class="getClassForHour(day.dayOfWeek, hour)"></td>
                     </tr>
                 </tbody>
                 <tbody v-else>
@@ -39,10 +65,13 @@
         </div>
         <div class="subscribe-button-container">
             <button class="subscribe-button" @click="subscribeToTelegram">Підписатись на Telegram</button>
-            <p class="note">* підписуйтесь, щоб отримувати сповіщення про відключення/включення світла в реальному часі</p>
+            <p class="note">* підписуйтесь, щоб отримувати сповіщення про відключення/включення світла в реальному часі
+            </p>
         </div>
     </div>
 </template>
+
+
 
 <script>
 import apiService from '../services/api';
@@ -52,11 +81,40 @@ export default {
         return {
             timeSlots: [],
             days: [],
-            hours: ['00-01', '01-02', '02-03', '03-04', '04-05', '05-06', '06-07', '07-08', '08-09', '09-10', '10-11', '11-12', '12-13', '13-14', '14-15', '15-16', '16-17', '17-18', '18-19', '19-20', '20-21', '21-22', '22-23', '23-24'],
+            hours: [
+                '00-01',
+                '01-02',
+                '02-03',
+                '03-04',
+                '04-05',
+                '05-06',
+                '06-07',
+                '07-08',
+                '08-09',
+                '09-10',
+                '10-11',
+                '11-12',
+                '12-13',
+                '13-14',
+                '14-15',
+                '15-16',
+                '16-17',
+                '17-18',
+                '18-19',
+                '19-20',
+                '20-21',
+                '21-22',
+                '22-23',
+                '23-24'
+            ],
+            isMobile: false
         };
     },
     computed: {
         sortedDays() {
+            if (!this.days || !Array.isArray(this.days)) {
+                return [];
+            }
             const sorted = [...this.days].sort((a, b) => a.dayOfWeek - b.dayOfWeek);
             const sunday = sorted.find(day => day.dayOfWeek === 0);
             const otherDays = sorted.filter(day => day.dayOfWeek !== 0);
@@ -67,7 +125,7 @@ export default {
         async fetchDays() {
             try {
                 const response = await apiService.getDays();
-                this.days = response.data;
+                this.days = response.data || [];
             } catch (error) {
                 console.error('Error fetching days:', error);
             }
@@ -75,12 +133,13 @@ export default {
         async fetchTimeSlots() {
             try {
                 const response = await apiService.getTimeSlots();
-                this.timeSlots = response.data;
+                this.timeSlots = response.data || [];
             } catch (error) {
                 console.error('Error fetching time slots:', error);
             }
         },
         isHourInTimeSlot(hour, timeSlot) {
+            if (!timeSlot || !timeSlot.startTime || !timeSlot.endTime) return false;
             const [hourStart] = hour.split('-').map(Number);
             const [slotStartHour, slotStartMinute] = timeSlot.startTime.split(':').map(Number);
             const [slotEndHour, slotEndMinute] = timeSlot.endTime.split(':').map(Number);
@@ -95,8 +154,9 @@ export default {
             );
         },
         getClassForHour(dayOfWeek, hour) {
+            if (typeof dayOfWeek !== 'number') return ''; // Додайте перевірку на тип даних
             const timeSlot = this.timeSlots.find(
-                slot => slot.startDay.dayOfWeek === dayOfWeek && this.isHourInTimeSlot(hour, slot)
+                slot => slot.startDay && slot.startDay.dayOfWeek === dayOfWeek && this.isHourInTimeSlot(hour, slot)
             );
             return timeSlot ? this.getClassForTimeSlot(timeSlot.type) : '';
         },
@@ -122,31 +182,65 @@ export default {
         },
         highlightCell(event) {
             const cell = event.currentTarget;
-            cell.classList.add('highlight-cell');
+            if (this.isMobile) {
+                const index = Array.from(cell.parentNode.children).indexOf(cell);
+                this.$el.querySelectorAll(`tbody tr td:nth-child(${index + 1})`).forEach(td => {
+                    td.classList.add('highlight-column');
+                });
+            } else {
+                cell.classList.add('highlight-cell');
+            }
         },
         removeCellHighlight(event) {
             const cell = event.currentTarget;
-            cell.classList.remove('highlight-cell');
-        },
-        subscribeToTelegram() {
-            window.location.href = 'https://t.me/svitlobot_em_e2a';
+            if (this.isMobile) {
+                const index = Array.from(cell.parentNode.children).indexOf(cell);
+                this.$el.querySelectorAll(`tbody tr td:nth-child(${index + 1})`).forEach(td => {
+                    td.classList.remove('highlight-column');
+                });
+            } else {
+                cell.classList.remove('highlight-cell');
+            }
         },
         highlightCurrentTime() {
             const now = new Date();
             const currentDayOfWeek = now.getDay();
-            const dayRowIndex = (currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1) + 1;
-            const dayRow = this.$el.querySelector(`tbody tr:nth-child(${dayRowIndex})`);
-            if (dayRow) {
-                this.highlightRow({ currentTarget: dayRow });
+            const currentHour = now.getHours();
+
+            if (this.isMobile) {
+                // Виділення стовпця на мобільному
+                const dayColumnIndex = currentDayOfWeek === 0 ? 7 : currentDayOfWeek;
+                this.$el.querySelectorAll(`tbody tr td:nth-child(${dayColumnIndex + 1})`).forEach(cell => {
+                    cell.classList.add('highlight-column');
+                });
+            } else {
+                // Виділення рядка на десктопі
+                const dayRowIndex = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
+                const dayRow = this.$el.querySelector(`tbody tr:nth-child(${dayRowIndex + 1})`);
+                if (dayRow) {
+                    dayRow.classList.add('highlight-row');
+                    const hourCell = dayRow.children[currentHour + 1];
+                    if (hourCell) {
+                        hourCell.classList.add('highlight-cell');
+                    }
+                }
             }
+        },
+        checkIfMobile() {
+            this.isMobile = window.innerWidth <= 768;
         }
     },
     mounted() {
+        this.checkIfMobile();
+        window.addEventListener('resize', this.checkIfMobile);
         this.fetchDays().then(() => {
             this.fetchTimeSlots().then(() => {
                 this.highlightCurrentTime();
             });
         });
+    },
+    beforeUnmount() {
+        window.removeEventListener('resize', this.checkIfMobile);
     }
 }
 </script>
@@ -202,8 +296,9 @@ export default {
     border: 2px solid #ffbb00;
 }
 
-.highlight-cell {
-    background-color: #8ff376 !important;
+.highlight-column {
+    background-color: #e2e2e2;
+    border: 2px solid #ffbb00;
 }
 
 .cell-on {
@@ -234,7 +329,7 @@ export default {
     text-align: center;
 }
 
-.time-slots-table th.rotate-text {
+th.rotate-text {
     position: relative;
     text-align: center;
     vertical-align: middle;
@@ -242,7 +337,7 @@ export default {
     white-space: nowrap;
 }
 
-.time-slots-table th.rotate-text::before {
+th.rotate-text::before {
     content: attr(data-hour);
     position: absolute;
     top: 50%;
@@ -318,10 +413,21 @@ export default {
 
 /* Media Queries */
 @media (max-width: 768px) {
-    .time-slots-table th,
+    .time-slots-table th.rotate-text {
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 10px;
+        height: 90px;
+    }
+
     .time-slots-table td {
-        font-size: 14px;
-        padding: 8px;
+        font-size: 12px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 10px;
     }
 
     .time-slots-table th.rotate-text::before {
@@ -348,14 +454,25 @@ export default {
 }
 
 @media (max-width: 480px) {
-    .table-title {
-        font-size: 20px;
+    .time-slots-table th.rotate-text {
+        font-size: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 6px;
+        height: 70px;
     }
 
-    .time-slots-table th,
     .time-slots-table td {
-        font-size: 12px;
+        font-size: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
         padding: 6px;
+    }
+
+    .time-slots-table th.rotate-text::before {
+        font-size: 10px;
     }
 
     .cell-off,
