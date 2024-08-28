@@ -11,8 +11,8 @@
             <table class="status-table">
                 <thead>
                     <tr>
-                        <th @click="sortTable('createdAt')">Дата</th>
-                        <th @click="sortTable('status')">Статус</th>
+                        <th @click="sortTable('createdAt')" style="text-align: center;">Дата</th>
+                        <th @click="sortTable('status')" style="text-align: center;">Статус</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -308,6 +308,7 @@ export default {
 }
 
 @media (max-width: 768px) {
+
     .status-table th,
     .status-table td {
         padding: 10px 40px;
@@ -317,7 +318,7 @@ export default {
 @media (max-width: 480px) {
     .status-table th,
     .status-table td {
-        padding: 10px 20px;
+        padding: 10px 15px;
     }
 }
 </style>
