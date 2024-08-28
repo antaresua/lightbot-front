@@ -1,31 +1,33 @@
 <template>
-    <div class="table-container">
-        <h2 class="table-title" style="font-weight: bold;">Лог подій</h2>
+    <div class="parent-container">
+        <div class="table-container">
+            <h2 class="table-title" style="font-weight: bold;">Лог подій</h2>
 
-        <div class="current-status">
-            <h3>Поточний статус: <span v-html="currentStatusLabel"></span></h3>
-            <p>{{ duration }}</p>
-        </div>
+            <div class="current-status">
+                <h3>Поточний статус: <span v-html="currentStatusLabel"></span></h3>
+                <p>{{ duration }}</p>
+            </div>
 
-        <table class="status-table">
-            <thead>
-                <tr>
-                    <th @click="sortTable('createdAt')">Дата</th>
-                    <th @click="sortTable('status')">Статус</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(status, index) in paginatedStatuses" :key="status.id"
-                    :class="{ 'highlight-row': index === 0 }">
-                    <td>{{ formatDate(status.createdAt) }}</td>
-                    <td v-html="getStatusLabel(status.status)"></td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="pagination">
-            <button @click="prevPage" :disabled="currentPage === 1" class="btn pagination-btn">❮</button>
-            <span>Сторінка {{ currentPage }} з {{ totalPages }}</span>
-            <button @click="nextPage" :disabled="currentPage === totalPages" class="btn pagination-btn">❯</button>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th @click="sortTable('createdAt')">Дата</th>
+                        <th @click="sortTable('status')">Статус</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(status, index) in paginatedStatuses" :key="status.id"
+                        :class="{ 'highlight-row': index === 0 }">
+                        <td>{{ formatDate(status.createdAt) }}</td>
+                        <td v-html="getStatusLabel(status.status)"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button @click="prevPage" :disabled="currentPage === 1" class="btn pagination-btn">❮</button>
+                <span>Сторінка {{ currentPage }} з {{ totalPages }}</span>
+                <button @click="nextPage" :disabled="currentPage === totalPages" class="btn pagination-btn">❯</button>
+            </div>
         </div>
     </div>
 </template>
@@ -169,9 +171,14 @@ export default {
     color: #333;
 }
 
+.parent-container {
+    display: flex;
+    justify-content: center;
+    padding-top: 10px;
+}
+
 .table-container {
-    max-width: 1200px;
-    margin: 20px auto;
+    display: inline-block;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -232,16 +239,18 @@ export default {
 }
 
 .status-table {
-    width: 100%;
     border-collapse: collapse;
+    display: inline-table;
+    margin: auto;
+    max-width: 100%;
 }
 
 .status-table th,
 .status-table td {
     border: 1px solid #ddd;
     padding: 12px;
-    text-align: center;
-    font-size: 14px;
+    text-align: left;
+    padding: 10px 100px;
 }
 
 .status-table th {
@@ -296,5 +305,19 @@ export default {
     margin: 0;
     font-size: 16px;
     color: #666;
+}
+
+@media (max-width: 768px) {
+    .status-table th,
+    .status-table td {
+        padding: 10px 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .status-table th,
+    .status-table td {
+        padding: 10px 20px;
+    }
 }
 </style>
