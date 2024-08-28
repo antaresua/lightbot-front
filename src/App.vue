@@ -15,10 +15,10 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <router-link class="nav-link" to="/schedule">Графік</router-link>
+                            <router-link class="nav-link" to="/schedule" @click="closeNav">Графік</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link" to="/statuses">Лог подій</router-link>
+                            <router-link class="nav-link" to="/statuses" @click="closeNav">Лог подій</router-link>
                         </li>
                         <!-- Додайте інші посилання на сторінки, якщо потрібно -->
                         <li class="nav-item dropdown disabled">
@@ -27,8 +27,12 @@
                                 Управління графіком
                             </a>
                             <ul class="dropdown-menu">
-                                <li><router-link to="/days" class="dropdown-item">Дні тижня</router-link></li>
-                                <li><router-link to="/timeslots" class="dropdown-item">Тайм-слоти</router-link></li>
+                                <li>
+                                    <router-link to="/days" class="dropdown-item" @click="closeNav">Дні тижня</router-link>
+                                </li>
+                                <li>
+                                    <router-link to="/timeslots" class="dropdown-item" @click="closeNav">Тайм-слоти</router-link>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -40,8 +44,25 @@
 </template>
 
 <script>
+import 'bootstrap/dist/css/bootstrap.min.css';
+import * as bootstrap from 'bootstrap';
+
 export default {
     name: 'App',
+    methods: {
+        closeNav() {
+            const navBar = document.getElementById('navbarNav');
+            if (navBar) {
+                const bsCollapse = new bootstrap.Collapse(navBar, {
+                    toggle: false
+                });
+                bsCollapse.hide();
+            }
+        }
+    },
+    mounted() {
+        // Додайте будь-які додаткові налаштування або ініціалізацію тут, якщо потрібно
+    }
 };
 </script>
 
