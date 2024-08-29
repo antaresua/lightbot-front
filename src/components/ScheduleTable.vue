@@ -44,7 +44,7 @@
                     <tr v-for="hour in hours" :key="hour">
                         <td>{{ hour }}</td>
                         <td v-for="day in sortedDays" :key="day.dayOfWeek" :class="getClassForHour(day.dayOfWeek, hour)"
-                            @click="highlightColumn(day.dayOfWeek)"></td>
+                            @click="highlightColumn(day.dayOfWeek, hour.split('-').map(Number)[0])"></td>
                     </tr>
                 </tbody>
                 <tbody v-else>
@@ -184,9 +184,7 @@ export default {
         },
         highlightCell(event) {
             const cell = event.currentTarget;
-            if (!this.isMobile) {
-                cell.classList.add('highlight-cell');
-            }
+            cell.classList.add('highlight-cell');
         },
         removeCellHighlight(event) {
             const cell = event.currentTarget;
@@ -207,7 +205,7 @@ export default {
                     cell.classList.remove('highlight-column');
                     cell.classList.remove('highlight-column-footer');
                 });
-                this.highlightColumn(currentDayOfWeek);
+                this.highlightColumn(currentDayOfWeek, currentHour);
             } else {
                 this.$el.querySelectorAll('tbody tr.highlight-row').forEach(row => {
                     row.classList.remove('highlight-row');
@@ -228,16 +226,20 @@ export default {
                 }
             }
         },
-        highlightColumn(dayOfWeek) {
+        highlightColumn(dayOfWeek, hour = undefined) {
+            const dayColumnIndex = dayOfWeek === 0 ? 7 : dayOfWeek;
+
+            // Remove previous highlights
             this.$el.querySelectorAll('thead tr th.highlight-column-header').forEach(cell => {
                 cell.classList.remove('highlight-column-header');
             });
             this.$el.querySelectorAll('tbody tr td.highlight-column').forEach(cell => {
                 cell.classList.remove('highlight-column');
+                cell.classList.remove('highlight-cell');
                 cell.classList.remove('highlight-column-footer');
             });
 
-            const dayColumnIndex = dayOfWeek === 0 ? 7 : dayOfWeek;
+            // Highlight the column
             this.$el.querySelectorAll('thead tr').forEach(row => {
                 const cell = row.children[dayColumnIndex];
                 if (cell) {
@@ -251,6 +253,9 @@ export default {
                 }
                 if (index === 23) {
                     cell.classList.add('highlight-column-footer');
+                }
+                if (hour === index) {
+                    cell.classList.add('highlight-cell');
                 }
             });
         },
