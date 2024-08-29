@@ -20,7 +20,7 @@
                 </tbody>
                 <tbody v-else>
                     <tr>
-                        <td colspan="2">Loading...</td>
+                        <td colspan="26">Loading...</td>
                     </tr>
                 </tbody>
             </table>
@@ -29,15 +29,15 @@
             <table v-else class="time-slots-table">
                 <thead v-if="days.length">
                     <tr>
-                        <th class="rotate-text">Часові<br>проміжки</th>
-                        <th v-for="day in sortedDays" :key="day.dayOfWeek" class="rotate-text" :data-hour="day.name"
+                        <th colspan="1" class="rotate-text"><span>Часові<br>проміжки</span></th>
+                        <th v-for="day in sortedDays" :key="day.dayOfWeek" class="rotate-text" :data-day="day.name"
                             @click="highlightColumn(day.dayOfWeek)">
                         </th>
                     </tr>
                 </thead>
                 <thead v-else>
                     <tr>
-                        <th colspan="2">Loading...</th>
+                        <th colspan="10">Loading...</th>
                     </tr>
                 </thead>
                 <tbody v-if="timeSlots.length">
@@ -49,7 +49,7 @@
                 </tbody>
                 <tbody v-else>
                     <tr>
-                        <td colspan="2">Loading...</td>
+                        <td colspan="10">Loading...</td>
                     </tr>
                 </tbody>
             </table>
@@ -184,23 +184,13 @@ export default {
         },
         highlightCell(event) {
             const cell = event.currentTarget;
-            if (this.isMobile) {
-                const index = Array.from(cell.parentNode.children).indexOf(cell);
-                this.$el.querySelectorAll(`tbody tr td:nth-child(${index + 1})`).forEach(td => {
-                    td.classList.add('highlight-column');
-                });
-            } else {
+            if (!this.isMobile) {
                 cell.classList.add('highlight-cell');
             }
         },
         removeCellHighlight(event) {
             const cell = event.currentTarget;
-            if (this.isMobile) {
-                const index = Array.from(cell.parentNode.children).indexOf(cell);
-                this.$el.querySelectorAll(`tbody tr td:nth-child(${index + 1})`).forEach(td => {
-                    td.classList.remove('highlight-column');
-                });
-            } else {
+            if (!this.isMobile) {
                 cell.classList.remove('highlight-cell');
             }
         },
@@ -210,21 +200,15 @@ export default {
             const currentHour = now.getHours();
 
             if (this.isMobile) {
-                // Remove existing highlights
-                // this.$el.querySelectorAll('tbody tr td.highlight-column').forEach(cell => {
-                //     cell.classList.remove('highlight-column');
-                // });
-
-                // // Highlight the current column
-                // const dayColumnIndex = currentDayOfWeek === 0 ? 7 : currentDayOfWeek;
-                // this.$el.querySelectorAll(`tbody tr`).forEach(row => {
-                //     const cell = row.children[dayColumnIndex];
-                //     if (cell) {
-                //         cell.classList.add('highlight-column');
-                //     }
-                // });
+                this.$el.querySelectorAll('thead tr th.highlight-column-header').forEach(cell => {
+                    cell.classList.remove('highlight-column-header');
+                });
+                this.$el.querySelectorAll('tbody tr td.highlight-column').forEach(cell => {
+                    cell.classList.remove('highlight-column');
+                    cell.classList.remove('highlight-column-footer');
+                });
+                this.highlightColumn(currentDayOfWeek);
             } else {
-                // Remove existing highlights
                 this.$el.querySelectorAll('tbody tr.highlight-row').forEach(row => {
                     row.classList.remove('highlight-row');
                 });
@@ -245,15 +229,28 @@ export default {
             }
         },
         highlightColumn(dayOfWeek) {
+            this.$el.querySelectorAll('thead tr th.highlight-column-header').forEach(cell => {
+                cell.classList.remove('highlight-column-header');
+            });
             this.$el.querySelectorAll('tbody tr td.highlight-column').forEach(cell => {
                 cell.classList.remove('highlight-column');
+                cell.classList.remove('highlight-column-footer');
             });
 
-            const dayColumnIndex = dayOfWeek === 0 ? 7 : dayOfWeek; // Додайте 1 для врахування колонок часу
-            this.$el.querySelectorAll('tbody tr').forEach(row => {
+            const dayColumnIndex = dayOfWeek === 0 ? 7 : dayOfWeek;
+            this.$el.querySelectorAll('thead tr').forEach(row => {
                 const cell = row.children[dayColumnIndex];
                 if (cell) {
-                    // cell.classList.add('highlight-column');
+                    cell.classList.add('highlight-column-header');
+                }
+            });
+            this.$el.querySelectorAll('tbody tr').forEach((row, index) => {
+                const cell = row.children[dayColumnIndex];
+                if (cell) {
+                    cell.classList.add('highlight-column');
+                }
+                if (index === 23) {
+                    cell.classList.add('highlight-column-footer');
                 }
             });
         },
@@ -326,8 +323,8 @@ export default {
     border: 2px solid #ffbb00;
 }
 
-.highlight-column {
-    border: 2px solid #ffbb00;
+.highlight-cell {
+    background-color: #8ff376 !important;
 }
 
 .cell-on {
@@ -442,8 +439,22 @@ th.rotate-text::before {
 
 /* Media Queries */
 @media (max-width: 768px) {
-    .highlight-column {
-        border: 2px solid #ffbb00 !important;
+    th.rotate-text {
+        position: relative;
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+        white-space: nowrap;
+    }
+
+    th.rotate-text::before {
+        content: attr(data-day);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        transform-origin: center;
+        white-space: nowrap;
     }
 
     .time-slots-table th.rotate-text {
@@ -468,6 +479,21 @@ th.rotate-text::before {
         font-size: 12px;
     }
 
+    .highlight-column {
+        border-right: 2px solid #ffbb00 !important;
+        border-left: 2px solid #ffbb00 !important;
+    }
+
+    .highlight-column-header {
+        border-top: 2px solid #ffbb00 !important;
+        border-right: 2px solid #ffbb00 !important;
+        border-left: 2px solid #ffbb00 !important;
+    }
+
+    .highlight-column-footer {
+        border-bottom: 2px solid #ffbb00 !important;
+    }
+
     .cell-off,
     .cell-possible-on {
         background-size: 12px 12px;
@@ -488,20 +514,37 @@ th.rotate-text::before {
 }
 
 @media (max-width: 480px) {
-    .highlight-column {
+    th.rotate-text {
         position: relative;
+        text-align: center;
+        vertical-align: middle;
+        padding: 10px;
+        white-space: nowrap;
     }
 
-    .highlight-column::before {
-        content: "";
+    th.rotate-text::before {
+        content: attr(data-day);
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 187, 0, 0.3); /* Напівпрозорий фон */
-        z-index: 1; /* Залишити кольори з клітинки видимими */
-        pointer-events: none; /* Не перехоплює кліки */
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        transform-origin: center;
+        white-space: nowrap;
+    }
+
+    .highlight-column {
+        border-right: 2px solid #ffbb00 !important;
+        border-left: 2px solid #ffbb00 !important;
+    }
+
+    .highlight-column-header {
+        border-top: 2px solid #ffbb00 !important;
+        border-right: 2px solid #ffbb00 !important;
+        border-left: 2px solid #ffbb00 !important;
+    }
+
+    .highlight-column-footer {
+        border-bottom: 2px solid #ffbb00 !important;
     }
 
     .time-slots-table th.rotate-text {
