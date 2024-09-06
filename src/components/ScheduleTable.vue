@@ -400,9 +400,10 @@ th.rotate-text::before {
 
 .legend-color {
     display: inline-block;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    /* border-radius: 50%; */
+    border: 1px solid rgb(235, 234, 234);
     margin-right: 8px;
 }
 
@@ -510,6 +511,11 @@ th.rotate-text::before {
 
     .legend-item {
         font-size: 12px;
+    }
+
+    .legend-color {
+        width: 20px;
+        height: 20px;
     }
 
     .subscribe-button {
