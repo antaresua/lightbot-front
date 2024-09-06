@@ -47,6 +47,9 @@ export default {
     getStatuses() {
         return apiClient.get(`/light/statuses`);
     },
+    getStatusesByDates(start, end) {
+        return apiClient.post(`/light/statuses/range`, {startDate: start, endDate: end});
+    },
     deleteStatus(id) {
         return apiClient.delete(`/light/status/${id}`);
     },

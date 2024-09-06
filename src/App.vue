@@ -28,10 +28,12 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <router-link to="/days" class="dropdown-item" @click="closeNav">Дні тижня</router-link>
+                                    <router-link to="/days" class="dropdown-item" @click="closeNav">Дні
+                                        тижня</router-link>
                                 </li>
                                 <li>
-                                    <router-link to="/timeslots" class="dropdown-item" @click="closeNav">Тайм-слоти</router-link>
+                                    <router-link to="/timeslots" class="dropdown-item"
+                                        @click="closeNav">Тайм-слоти</router-link>
                                 </li>
                             </ul>
                         </li>
@@ -40,6 +42,9 @@
             </div>
         </nav>
         <router-view />
+        <footer>
+            <p>&copy; 2024. Developed by <a href="https://t.me/bondarenkoid" target="_blank">@bondarenkoid</a>. Всі права захищено.</p>
+        </footer>
     </div>
 </template>
 
@@ -106,5 +111,14 @@ body {
 
 .disabled {
     color: rgba(158, 158, 158, 0.3) !important;
+}
+
+footer {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    text-align: center;
+    font-size: 12px;
+    text-size-adjust: 100%;
 }
 </style>

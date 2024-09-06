@@ -214,7 +214,6 @@ export default {
                     cell.classList.remove('highlight-cell');
                 });
 
-                // Highlight the current row and cell
                 const dayRowIndex = currentDayOfWeek === 0 ? 6 : currentDayOfWeek - 1;
                 const dayRow = this.$el.querySelector(`tbody tr:nth-child(${dayRowIndex + 1})`);
                 if (dayRow) {
@@ -229,7 +228,6 @@ export default {
         highlightColumn(dayOfWeek, hour = undefined) {
             const dayColumnIndex = dayOfWeek === 0 ? 7 : dayOfWeek;
 
-            // Remove previous highlights
             this.$el.querySelectorAll('thead tr th.highlight-column-header').forEach(cell => {
                 cell.classList.remove('highlight-column-header');
             });
@@ -239,7 +237,6 @@ export default {
                 cell.classList.remove('highlight-column-footer');
             });
 
-            // Highlight the column
             this.$el.querySelectorAll('thead tr').forEach(row => {
                 const cell = row.children[dayColumnIndex];
                 if (cell) {
@@ -261,6 +258,9 @@ export default {
         },
         checkIfMobile() {
             this.isMobile = window.innerWidth <= 768;
+        },
+        subscribeToTelegram() {
+            window.open('https://t.me/svitlobot_em_e2a');
         }
     },
     mounted() {

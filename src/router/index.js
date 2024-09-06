@@ -13,7 +13,9 @@ import StatusLog from '../components/StatusLog.vue';
 const routes = [
     {
         path: '/',
-        redirect: '/schedule' // Редірект з головної сторінки на /schedule
+        // name: 'LightCharts',
+        // component: () => import('../components/LightCharts.vue')
+        redirect: { name: 'Schedule' }
     },
     {
         path: '/days',
